@@ -4,7 +4,7 @@
             "name": "C/C++: gcc-9 build and debug active file",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${fileDirname}/${fileBasenameNoExtension}",
+            "program": "${fileDirname}/${fileBasenameNoExtension}.exe",
             "args": ["127.0.0.1"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
