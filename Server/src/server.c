@@ -107,6 +107,11 @@ int main(void)
 	}
 
 	printf("server: waiting for connections...\n");
+	
+
+	char *payload = "AHAHAHAHHAHAH";
+
+	FILE *fp = fopen("teste.txt", "r");
 
 	while(1) {  // main accept() loop
 		sin_size = sizeof their_addr;
@@ -123,7 +128,7 @@ int main(void)
 
 		if (!fork()) { // this is the child process
 			close(sockfd); // child doesn't need the listener
-			if (send(new_fd, "Hello, world!", 13, 0) == -1)
+			if (send(new_fd, fp, 13, 0) == -1)
 				perror("send");
 			close(new_fd);
 			exit(0);
