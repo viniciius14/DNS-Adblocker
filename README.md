@@ -4,8 +4,7 @@
 
 * ### HTTP Server  
 
-  * Make an HTTP server that no matter what returns a 1 x 1 image of a transparent pixel  
-  * Possibly change it in the future so that it also replies a 0-second video if video platforms (like YouTube) require videos in the ad designated space  
+  * Make an HTTP server that no matter what returns a 1 x 1 image of a transparent pixel
 
 * ### DNS Query  
 

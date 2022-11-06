@@ -53,6 +53,17 @@ int main(void)
 	char s[INET6_ADDRSTRLEN];
 	int rv;
 
+	unsigned char image[] = //hex code for 1x1 image
+	{ 
+		0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01,
+		0x00, 0x01, 0x00, 0x91, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff,
+		0xff, 0x00, 0x00, 0x00, 0x21, 0xf9, 0x04,
+		0x01, 0x00, 0x00, 0x02, 0x00, 0x2c, 0x00,
+		0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00,
+		0x00, 0x02, 0x02, 0x54, 0x01, 0x00, 0x3b 
+	};
+
 	memset(&hints, 0, sizeof hints);
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
@@ -109,9 +120,7 @@ int main(void)
 	printf("server: waiting for connections...\n");
 	
 
-	char *payload = "AHAHAHAHHAHAH";
-
-	FILE *fp = fopen("teste.txt", "r");
+	
 
 	while(1) {  // main accept() loop
 		sin_size = sizeof their_addr;
@@ -128,7 +137,7 @@ int main(void)
 
 		if (!fork()) { // this is the child process
 			close(sockfd); // child doesn't need the listener
-			if (send(new_fd, fp, 13, 0) == -1)
+			if (send(new_fd, image, 13, 0) == -1)
 				perror("send");
 			close(new_fd);
 			exit(0);
