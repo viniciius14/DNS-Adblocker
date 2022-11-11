@@ -38,3 +38,8 @@
 * [Let's code a TCP/IP stack, 1: Ethernet & ARP](https://www.saminiir.com/lets-code-tcp-ip-stack-1-ethernet-arp/)
 * [Let's code a TCP/IP stack, 2: IPv4 & ICMPv4](https://www.saminiir.com/lets-code-tcp-ip-stack-2-ipv4-icmpv4/)
 * [Let's code a TCP/IP stack, 3: TCP Basics & Handshake](https://www.saminiir.com/lets-code-tcp-ip-stack-3-tcp-handshake/)
+* [DNS RFC](https://www.ietf.org/rfc/rfc1035.txt)
+
+
+
+
