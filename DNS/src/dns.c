@@ -1,5 +1,8 @@
 #include <stdio.h>
 
+
+#define PORT "53"
+
 struct Header{
     __uint16_t ID;
     __uint16_t QR:1;
@@ -33,11 +36,11 @@ struct Resource{
 
 //"The answer, authority, and additional sections all share the same format"
 struct Message{
-    struct Header* header;
-    struct Question* question;
-    struct Resource* answer;
-    struct Resource* authority;
-    struct Resource* additional;
+    struct Header header;
+    struct Question question;
+    struct Resource answer;
+    struct Resource authority;
+    struct Resource additional;
 };
 
 
