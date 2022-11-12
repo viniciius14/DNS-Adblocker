@@ -1,6 +1,5 @@
 #include <stdio.h>
 
-
 #define PORT "53"
 
 struct Header{
@@ -44,12 +43,24 @@ struct Message{
 };
 
 
+//Resolver:
+//timestamp of when request began uses the absolute time format previously discussed for RR storage
+//parameter to limit the amount of work wich will be performed for this request
+
 int main(int argc, char** argv){
 
+    /*
+    infinite loop
+    take in calls 
+    check if received a calida dns package
+    if not reply error
+    else analyse package
+    check if domain name is in our hosts list
+    if it is return ip of our http server
+    else call a function that calls an actual dns server
+    and return whatever that returns
+    */
 
-
-
-
-
+   
     return 0;
 }
