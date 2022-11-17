@@ -80,84 +80,96 @@ int main(int argc, char **argv)
     struct addrinfo hints, *response, *p;
     struct sockaddr_in *ip_access;
 
-
-    //standard google query, hardcoded
-
-    struct Message hex_SGQ = {
-        //header
-        {
-            0xa6f9,//id, changes every request
-            0x00,//QR
-            0x00,//OP
-            NULL,//AA, not specified in wireshark (only for responses)
-            0x00,//TC
-            0x01,//RD
-            NULL,//RA, not specified in wireshark (only for responses)
-            0x00,//Z
-            //0x1,//AD bit: Set (not sure what this is)
-            NULL,//RCODE, not specified in wireshark (only for responses)
-            0x01,//QDCOUNT
-            0x00,//ANCOUNT
-            0x00,//NSCOUNT
-            0x01//ARCOUNT
+    //since objects can't be set to null they're gonna be set to 0
+    
+    //standard google dns query, hardcoded
+    struct Message SGQ = {
+        .header = {
+            .ID         = 0x700b,   // Varies everytime
+            .QR         = 0x00,     // It's a query
+            .Opcode     = 0x00,     // Standard query (0)
+            .AA         = 0x00,     // Only for responses
+            .TC         = 0x00,     // Message is not truncated
+            .RD         = 0x01,     // Do query recursively
+            .RA         = 0x00,     // Only for responses
+            .Z          = 0x00,
+            //0x01                  // AD bit: Set (not sure what this is)
+            .RCODE      = 0x00,     // Only for responses
+            .QDCOUNT    = 0x01,     // Questions: 1
+            .ANCOUNT    = 0x00,     // Resource records in answer section
+            .NSCOUNT    = 0x00,     // Server resource records in the authority records section
+            .ARCOUNT    = 0x01      // Resource records in the additional records section
         },
-        //question
-        {
-            "googlecom",//QNAME
-            0x0001,//QTYPE
-            0x0001//QCLASS
+        .question = {
+            .QNAME  = "googlecom",
+            .QTYPE  = 0x01,         // Type A
+            .QCLASS = 0x01          // Class: IN (0x0001)
         },
-        NULL,//answer
-        NULL,//authority
-        //additional
-        {
-            0x00,//NAME <Root>
-            0x0029,//TYPE OPT(41)
-            0x1000,//CLASS -> UDP payload size on wireshark
-            NULL,//TTL since its a query theres no TTL
-            0x0000c,//RDLENGTH
-            NULL//RDATA -> Don't see it specified in wireshark
+        .answer = {
+            0
+        },
+        .authority = {
+            0
+        },
+        .additional = {
+            .NAME       = 0x00,     // <Root>
+            .TYPE       = 0x29,     // OPT 41
+            .CLASS      = 0x1000,   // UDP payload size
+            //0x00                  // "Higher bits in extended RCODE: 0x00"
+            //EDNS0 version: 0
+            .TTL        = 0x00,     // Not specified
+            .RDLENGTH   = 0x0c,     // Length of RDATA
+            .RDATA      = 0x00      // Not specified
         }
     };
 
-    struct Message dec_SGQ = {
-        //header
-        {
-            42745,//id, changes every request
-            0,//QR
-            0,//OP
-            NULL,//AA, not specified in wireshark (only for responses)
-            0,//TC
-            1,//RD
-            NULL,//RA, not specified in wireshark (only for responses)
-            0,//Z
-            //0x1,//AD bit: Set (not sure what this is)
-            NULL,//RCODE, not specified in wireshark (only for responses)
-            1,//QDCOUNT
-            0,//ANCOUNT
-            0,//NSCOUNT
-            1//ARCOUNT
+    //standard google dns answer, hardcoded
+    struct Message SGA = {
+        .header = {
+            .ID         = 0x700b,   // varies everytime
+            .QR         = 0x01,     // It's a response
+            .Opcode     = 0x00,     // Standard query (0)
+            .AA         = 0x00,     // Server is not an authority for domain
+            .TC         = 0x00,     // Message is not truncated
+            .RD         = 0x01,     // Do query recursively
+            .RA         = 0x01,     // Server can do recursive queries
+            .Z          = 0x00,
+            //0x00                  // Answer authenticated: Answer/authority portion was not authenticated by the server
+            //0x00                  // Non-authenticated data: Unacceptable
+            .RCODE      = 0x00,     // No error
+            .QDCOUNT    = 0x01,     // Questions: 1
+            .ANCOUNT    = 0x01,     // Resource records in answer section
+            .NSCOUNT    = 0x00,     // Server resource records in the authority records section
+            .ARCOUNT    = 0x01      // Resource records in the additional records section
         },
-        //question
-        {
-            "googlecom",//QNAME
-            1,//QTYPE
-            1//QCLASS
+        .question = {
+            .QNAME      = "googlecom",
+            .QTYPE      = 0x01,     // Type A
+            .QCLASS     = 0x01      // Class: IN (0x0001)
         },
-        NULL,//answer
-        NULL,//authority
-        //additional
-        {
-            0,//NAME <Root>
-            41,//TYPE OPT(41)
-            4096,//CLASS -> UDP payload size on wireshark
-            NULL,//TTL since its a query theres no TTL
-            12,//RDLENGTH
-            NULL//RDATA -> Don't see it specified in wireshark
+        .answer = {
+            .NAME       = "googlecom",
+            .TYPE       = 0x01,         // Type A
+            .CLASS      = 0x01,         // Class: IN (0x0001)
+            .TTL        = 0x54,         // 84 seconds
+            .RDLENGTH   = 0x04,         // length of RDATA
+            .RDATA      = 0xacd9a8ae    // 4 octet ARPA Internet address
+        },
+        .authority = {
+            0
+        },
+        .additional = {
+            .NAME       = 0x00,     // <Root>
+            .TYPE       = 0x29,     // OPT 41
+            .CLASS      = 0x0200,   // UDP payload size
+            //0x00                  // "Higher bits in extended RCODE: 0x00"
+            //EDNS0 version: 0
+            .TTL        = 0x00,     // Mot specified
+            .RDLENGTH   = 0x0c,     // Length of RDATA
+            .RDATA      = 0x00      // Mot specified
         }
     };
-
-
+/*
     printf("%x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x",
         dec_SGQ.header.ID,
         dec_SGQ.header.QR,
@@ -176,12 +188,8 @@ int main(int argc, char **argv)
         dec_SGQ.additional.TTL,
         dec_SGQ.additional.RDLENGTH,
         dec_SGQ.additional.RDATA);
-
-
-
-
-
-
+    */
+    
     if (argc != 2)
     {
         printf("Usage: ./program address");
