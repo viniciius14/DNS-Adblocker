@@ -41,7 +41,7 @@ struct __attribute__((__packed__)) Resource
     char *RDATA;
 };
 
-//"The answer, authority, and additional sections all share the same format"
+// "The answer, authority, and additional sections all share the same format"
 struct __attribute__((__packed__)) Message
 {
     struct Header header;
@@ -80,9 +80,9 @@ int main(int argc, char **argv)
     struct addrinfo hints, *response, *p;
     struct sockaddr_in *ip_access;
 
-    //since objects can't be set to null they're gonna be set to 0
+    // Since objects can't be set to null they're gonna be set to 0
     
-    //standard google dns query, hardcoded
+    // Standard google dns query, hardcoded
     struct Message SGQ = {
         .header = {
             .ID         = 0x700b,   // Varies everytime
@@ -123,7 +123,7 @@ int main(int argc, char **argv)
         }
     };
 
-    //standard google dns answer, hardcoded
+    // Standard google dns answer, hardcoded
     struct Message SGA = {
         .header = {
             .ID         = 0x700b,   // varies everytime
@@ -169,26 +169,29 @@ int main(int argc, char **argv)
             .RDATA      = 0x00      // Mot specified
         }
     };
-/*
+    
+    /*
     printf("%x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x",
-        dec_SGQ.header.ID,
-        dec_SGQ.header.QR,
-        dec_SGQ.header.Opcode,
-        dec_SGQ.header.AA,
-        dec_SGQ.header.TC,
-        dec_SGQ.header.RD,
-        dec_SGQ.header.RA,
-        dec_SGQ.header.Z,
-        dec_SGQ.header.RCODE,
-        dec_SGQ.question.QNAME,
-        dec_SGQ.question.QTYPE,
-        dec_SGQ.question.QCLASS,
-        dec_SGQ.additional.TYPE,
-        dec_SGQ.additional.CLASS,
-        dec_SGQ.additional.TTL,
-        dec_SGQ.additional.RDLENGTH,
-        dec_SGQ.additional.RDATA);
+        SGQ.header.ID,
+        SGQ.header.QR,
+        SGQ.header.Opcode,
+        SGQ.header.AA,
+        SGQ.header.TC,
+        SGQ.header.RD,
+        SGQ.header.RA,
+        SGQ.header.Z,
+        SGQ.header.RCODE,
+        SGQ.question.QNAME,
+        SGQ.question.QTYPE,
+        SGQ.question.QCLASS,
+        SGQ.additional.TYPE,
+        SGQ.additional.CLASS,
+        SGQ.additional.TTL,
+        SGQ.additional.RDLENGTH,
+        SGQ.additional.RDATA);
     */
+    
+    
     
     if (argc != 2)
     {
