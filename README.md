@@ -23,23 +23,13 @@
 
 * The code has to work in the LusiadaLab VM 2.0  
 
-## TODO  
-
-* [ ] Fill the links in on the sources section
-* [ ] Make a test server
-* [ ] Make test client
-* [ ] Test
 
 ## Sources  
 
 * Computer Networking A Top-Down Approach 7th edition
 * [Beej's Guide to C Programming](https://beej.us/guide/bgc/pdf/bgc_a4_c_2.pdf)
 * [Beej's Guide to Network Programming](https://beej.us/guide/bgnet/pdf/bgnet_a4_c_2.pdf)
-* [Let's code a TCP/IP stack, 1: Ethernet & ARP](https://www.saminiir.com/lets-code-tcp-ip-stack-1-ethernet-arp/)
-* [Let's code a TCP/IP stack, 2: IPv4 & ICMPv4](https://www.saminiir.com/lets-code-tcp-ip-stack-2-ipv4-icmpv4/)
-* [Let's code a TCP/IP stack, 3: TCP Basics & Handshake](https://www.saminiir.com/lets-code-tcp-ip-stack-3-tcp-handshake/)
 * [DNS RFC](https://www.ietf.org/rfc/rfc1035.txt)
-
-
-
+* [Beej's Demo Server](https://beej.us/guide/bgnet/source/examples/server.c)
+* [Beej's Demo Client](https://beej.us/guide/bgnet/source/examples/client.c)
 
