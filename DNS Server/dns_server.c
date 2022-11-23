@@ -15,12 +15,14 @@
 #define PORT "4950"  // -> to change too 53
 #define MAXBUFLEN 100
 
+unsigned char get_ip_address(void)
+{
+
+}
 
 // this funcion will create our dns packet for replys
 void create_packet(struct Message_Query *Q_ptr, struct Message_Response *R_ptr)
 {
-    unsigned char new_rdata[] = {0xac, 0xd9, 0xa8, 0xae};
-
     struct Header new_header = {
         .ID         = Q_ptr->header.ID,   // Varies everytime
         .QR         = 0x01,     // It's a response
@@ -30,8 +32,8 @@ void create_packet(struct Message_Query *Q_ptr, struct Message_Response *R_ptr)
         .RD         = 0x01,     // Do query recursively
         .RA         = 0x01,     // Server can do recursive queries
         .Z          = 0x00,
-        //0x00                  // Answer authenticated: Answer/authority portion was not authenticated by the server
-        //0x00                  // Non-authenticated data: Unacceptable
+                    //0x00      // Answer authenticated: Answer/authority portion was not authenticated by the server
+                    //0x00      // Non-authenticated data: Unacceptable
         .RCODE      = 0x00,     // No error
         .QDCOUNT    = 0x01,     // Questions: 1
         .ANCOUNT    = 0x01,     // Resource records in answer section
@@ -45,19 +47,19 @@ void create_packet(struct Message_Query *Q_ptr, struct Message_Response *R_ptr)
     };
     struct Resource new_answer = {
         .NAME       = Q_ptr->question.QNAME,
-        .TYPE       = 0x01,         // Type A
-        .CLASS      = 0x01,         // Class: IN (0x0001)
-        .TTL        = 0x54,         // 84 seconds
-        .RDLENGTH   = 0x04,         // length of RDATA
-        .RDATA      = new_rdata  // 4 octet ARPA Internet address
+        .TYPE       = 0x01,     // Type A
+        .CLASS      = 0x01,     // Class: IN (0x0001)
+        .TTL        = 0x3c,     // Time to live (1 minute)
+        .RDLENGTH   = 0x04,     // length of RDATA
+        .RDATA      = get_ip_address()//{0xac, 0xd9, 0xa8, 0xae} // 4 octet ARPA Internet address
     };
     struct Resource new_additional = {
         .NAME       = 0x00,     // <Root>
         .TYPE       = 0x29,     // OPT 41
         .CLASS      = 0x0200,   // UDP payload size
-        //0x00                  // "Higher bits in extended RCODE: 0x00"
+                    //0x00      // "Higher bits in extended RCODE: 0x00"
         //EDNS0 version: 0
-        .TTL        = 0x00,     // Not specified
+        .TTL        = 0x3c,     // Time to live (1 minute)
         .RDLENGTH   = 0x0c,     // Length of RDATA
         .RDATA      = 0x00      // Not specified
     };
@@ -173,7 +175,10 @@ int main(void)
 		exit(1);
 	}
 
-	printf("listener: got packet from %s\n", inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof s));
+	printf("listener: got packet from %s\n", 
+        inet_ntop(their_addr.ss_family, 
+        get_in_addr((struct sockaddr *)&their_addr), s, sizeof s));
+    
 	printf("listener: packet is %d bytes long\n", numbytes);
 	buf[numbytes] = '\0';
 	printf("listener: packet contains: ");
