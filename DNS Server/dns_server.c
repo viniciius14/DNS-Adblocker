@@ -176,7 +176,7 @@ int main(void)
 	printf("listener: got packet from %s\n", inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof s));
 	printf("listener: packet is %d bytes long\n", numbytes);
 	buf[numbytes] = '\0';
-	printf("listener: packet contains: ", buf);
+	printf("listener: packet contains: ");
 
     for(int i = 0 ; i != numbytes ; i++){
         printf("%c",buf[i]);
