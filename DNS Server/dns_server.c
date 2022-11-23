@@ -12,16 +12,13 @@
 #include "../Headers/dns_utils.h"
 
 
-
-#define PORT "53"
-
+#define PORT "4950"
 #define MAXBUFLEN 100
 
 
 // this funcion will create our dns packet for replys
-void create_packet(struct Message_Query* Q_ptr, struct Message_Response* R_ptr)
+void create_packet(struct Message_Query *Q_ptr, struct Message_Response *R_ptr)
 {
-
     unsigned char new_rdata[] = {0xac, 0xd9, 0xa8, 0xae};
 
     struct Header new_header = {
@@ -101,8 +98,8 @@ int main(void)
 	hints.ai_flags = AI_PASSIVE; // use my IP
 
 
-    struct Message_Response* test = (struct Message_Response*)malloc(sizeof(struct Message_Response));
-
+    struct Message_Response *test = (struct Message_Response*)malloc(sizeof(struct Message_Response));
+    // standard google query
     struct Message_Query SGQ = {
         .header = {
             .ID         = 0x700b,   // Varies everytime
@@ -137,6 +134,8 @@ int main(void)
         }
     };
 
+
+
 	if ((rv = getaddrinfo(NULL, PORT, &hints, &servinfo)) != 0) {
 		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
 		return 1;
@@ -144,8 +143,7 @@ int main(void)
 
 	// loop through all the results and bind to the first we can
 	for(p = servinfo; p != NULL; p = p->ai_next) {
-		if ((sockfd = socket(p->ai_family, p->ai_socktype,
-				p->ai_protocol)) == -1) {
+		if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1) {
 			perror("listener: socket");
 			continue;
 		}
@@ -175,10 +173,7 @@ int main(void)
 		exit(1);
 	}
 
-	printf("listener: got packet from %s\n",
-		inet_ntop(their_addr.ss_family,
-			get_in_addr((struct sockaddr *)&their_addr),
-			s, sizeof s));
+	printf("listener: got packet from %s\n", inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof s));
 	printf("listener: packet is %d bytes long\n", numbytes);
 	buf[numbytes] = '\0';
 	printf("listener: packet contains \"%s\"\n", buf);
