@@ -12,17 +12,82 @@
 #include "../Headers/dns_utils.h"
 
 
-#define PORT "4950"  // -> to change too 53
+#define PORT "4950"  // -> to change too 53 
 #define MAXBUFLEN 100
 
-unsigned char get_ip_address(void)
+
+void add_char(char to_add, char word[])
 {
+    if(strlen(word) == 0){
+        word = (char*)realloc(word, 1);
+        word[strlen(word)] = '\0';
+    }
+    word = (char*)realloc(word, strlen(word) + 1);
+    word[strlen(word) - 1] = to_add;
+}
+
+void get_clean_address(struct Message_Query *Q_ptr, char* address)
+{
+    char* a = Q_ptr->question.QNAME;
+    int i = 0, num = 0;
+    
+    // Transform our 6google3com0 into google.com
+    do
+    {
+        if (num == 0)
+        {
+            num = a[i];
+            if(i != 0){
+                add_char('.', address);
+            }
+            i++;
+            continue;
+        }
+        add_char(a[i], address);
+        i++;num--;
+    }
+    while(a[i] != 0);
 
 }
 
-// this funcion will create our dns packet for replys
+void get_ip_address(struct Message_Query *Q_ptr, char *ip_addr)
+{
+    struct addrinfo hints, *res, *p;
+    int status;
+    char ipstr[INET6_ADDRSTRLEN];
+
+    memset(&hints, 0, sizeof hints);
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;    
+
+    char* addr;
+    get_clean_address(Q_ptr, addr);
+    
+    if ((status = getaddrinfo(addr, NULL, &hints, &res)) != 0) {
+        fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(status));
+        return;
+    }
+
+    // Will only work for IPv4
+    for(p = res;p != NULL; p = p->ai_next) {
+        void *addr;
+
+        struct sockaddr_in *ipv4 = (struct sockaddr_in *)p->ai_addr;
+        addr = &(ipv4->sin_addr);
+
+        // convert the IP to a string and print it:
+        inet_ntop(p->ai_family, addr, ipstr, sizeof ipstr);
+    }
+
+    strcpy(ip_addr, ipstr);
+}
+
+// This funcion will create our dns packet for replys
 void create_packet(struct Message_Query *Q_ptr, struct Message_Response *R_ptr)
 {
+    char *ip_addr;
+    get_ip_address(Q_ptr, ip_addr);
+
     struct Header new_header = {
         .ID         = Q_ptr->header.ID,   // Varies everytime
         .QR         = 0x01,     // It's a response
@@ -51,7 +116,7 @@ void create_packet(struct Message_Query *Q_ptr, struct Message_Response *R_ptr)
         .CLASS      = 0x01,     // Class: IN (0x0001)
         .TTL        = 0x3c,     // Time to live (1 minute)
         .RDLENGTH   = 0x04,     // length of RDATA
-        .RDATA      = get_ip_address()//{0xac, 0xd9, 0xa8, 0xae} // 4 octet ARPA Internet address
+        .RDATA      = ip_addr//{0xac, 0xd9, 0xa8, 0xae} // 4 octet ARPA Internet address
     };
     struct Resource new_additional = {
         .NAME       = 0x00,     // <Root>
@@ -60,7 +125,7 @@ void create_packet(struct Message_Query *Q_ptr, struct Message_Response *R_ptr)
                     //0x00      // "Higher bits in extended RCODE: 0x00"
         //EDNS0 version: 0
         .TTL        = 0x3c,     // Time to live (1 minute)
-        .RDLENGTH   = 0x0c,     // Length of RDATA
+        .RDLENGTH   = 0x00,     // Length of RDATA
         .RDATA      = 0x00      // Not specified
     };
 

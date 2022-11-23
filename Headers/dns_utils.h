@@ -22,19 +22,19 @@ struct __attribute__((__packed__)) Header
 
 struct __attribute__((__packed__)) Question
 {
-    unsigned char *QNAME;
+    char *QNAME;
     __uint16_t QTYPE;
     __uint16_t QCLASS;
 };
 
 struct __attribute__((__packed__)) Resource
 {
-    unsigned char *NAME;
+    char *NAME;
     __uint16_t TYPE;
     __uint16_t CLASS;
     __uint32_t TTL;
     __uint16_t RDLENGTH;
-    unsigned char *RDATA;
+    char *RDATA;
 };
 
 struct __attribute__((__packed__)) Message_Query
