@@ -23,13 +23,11 @@
 
 * The code has to work in the LusiadaLab VM 2.0  
 
-
 ## Sources  
 
 * Computer Networking A Top-Down Approach 7th edition
 * [Beej's Guide to C Programming](https://beej.us/guide/bgc/pdf/bgc_a4_c_2.pdf)
 * [Beej's Guide to Network Programming](https://beej.us/guide/bgnet/pdf/bgnet_a4_c_2.pdf)
 * [DNS RFC](https://www.ietf.org/rfc/rfc1035.txt)
-* [Beej's Demo Server](https://beej.us/guide/bgnet/source/examples/server.c)
-* [Beej's Demo Client](https://beej.us/guide/bgnet/source/examples/client.c)
-
+* [Beej's Demo Server](https://beej.us/guide/bgnet/examples/listener.c)
+* [Beej's Demo Client](https://beej.us/guide/bgnet/examples/talker.c)
