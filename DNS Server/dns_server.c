@@ -12,7 +12,7 @@
 #include "../Headers/dns_utils.h"
 
 
-#define PORT "4950"
+#define PORT "4950"  // -> to change too 53
 #define MAXBUFLEN 100
 
 
@@ -176,7 +176,12 @@ int main(void)
 	printf("listener: got packet from %s\n", inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof s));
 	printf("listener: packet is %d bytes long\n", numbytes);
 	buf[numbytes] = '\0';
-	printf("listener: packet contains \"%s\"\n", buf);
+	printf("listener: packet contains: ", buf);
+
+    for(int i = 0 ; i != numbytes ; i++){
+        printf("%c",buf[i]);
+    }
+    printf("\n");
 
 	close(sockfd);
 
