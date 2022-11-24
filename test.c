@@ -21,7 +21,7 @@ int main(void){
     //for(;;){}
 
 
-    char reply[] = {
+    unsigned char reply[1][60] = {
         0xc0, 0x32, 0x81, 0x80, 0x00,
         0x01, 0x00, 0x01, 0x00, 0x00,
         0x00, 0x01, 0x06, 0x67, 0x6f,
@@ -37,6 +37,6 @@ int main(void){
     //char reply[100];
     //create_reply(buffer, reply);
 
-    respond(reply);
-
+    
+    respond(reply, 60);
 }
