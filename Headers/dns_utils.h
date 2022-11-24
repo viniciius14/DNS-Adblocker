@@ -79,18 +79,15 @@ void *get_in_addr(struct sockaddr *sa)
 	return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
-
-
-void *await_receive(unsigned char buf[MAXBUFLEN])
+void *await_receive(char buf[MAXBUFLEN])
 {
-    //recvfrom needs a socket descriptor -> s
-    int sockfd;
+    int sockfd, rv, numbytes;
+	char s[INET6_ADDRSTRLEN];    
+
 	struct addrinfo hints, *servinfo, *p;
-	int rv;
-	int numbytes;
 	struct sockaddr_storage their_addr;
+
 	socklen_t addr_len;
-	char s[INET6_ADDRSTRLEN];
 
 	memset(&hints, 0, sizeof hints);
 	hints.ai_family = AF_INET6; // set to AF_INET to use IPv4
@@ -135,13 +132,91 @@ void *await_receive(unsigned char buf[MAXBUFLEN])
 	printf("listener: got packet from %s\n", inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof s));
 	printf("listener: packet is %d bytes long\n", numbytes);
 	buf[numbytes] = '\0';
-	printf("listener: packet contains \"%s\"\n", buf);
+	// printf("listener: packet contents in char's");
+    // for(int i = 0 ; i != numbytes ; i++){
+    //     printf("%c",buf[i]);
+    // }
+    printf("\nlistener: packet contents in a hex stream ");
+    for(int i = 0 ; i != numbytes ; i++){
+        printf("%x",buf[i]);
+    }
+    printf("\n");
 }
 
 
 
 
+void *respond(char *reply) 
+{
+    int sockfd, rv, numbytes;
+	struct addrinfo hints, *servinfo, *p;
 
+    memset(&hints, 0, sizeof hints);
+	hints.ai_family = AF_INET6; // set to AF_INET to use IPv4
+	hints.ai_socktype = SOCK_DGRAM;
+
+	if ((rv = getaddrinfo("::1", PORT, &hints, &servinfo)) != 0) {
+		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
+		return NULL;
+	}
+
+	// loop through all the results and make a socket
+	for(p = servinfo; p != NULL; p = p->ai_next) {
+		if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1) {
+			perror("talker: socket");
+			continue;
+		}
+
+		break;
+	}
+
+	if (p == NULL) {
+		fprintf(stderr, "talker: failed to create socket\n");
+		return NULL;
+	}
+
+	if ((numbytes = sendto(sockfd, reply, sizeof(reply), 0, p->ai_addr, p->ai_addrlen)) == -1) {
+		perror("talker: sendto");
+		exit(1);
+	}
+
+	//freeaddrinfo(servinfo);
+
+	printf("talker: sent %d bytes to localhost\n", numbytes);
+
+
+
+	socklen_t addr_len;
+	struct sockaddr_storage their_addr;
+	char buf[MAXBUFLEN];
+	char s[INET6_ADDRSTRLEN];
+
+	addr_len = sizeof their_addr;
+	if ((numbytes = recvfrom(sockfd, buf, MAXBUFLEN-1 , 0,
+		(struct sockaddr *)&their_addr, &addr_len)) == -1) {
+		perror("recvfrom");
+		exit(1);
+	}	
+
+	printf("client: got packet from %s\n", 
+        inet_ntop(their_addr.ss_family, 
+        get_in_addr((struct sockaddr *)&their_addr), s, sizeof s));
+    
+	printf("client: packet is %d bytes long\n", numbytes);
+	buf[numbytes] = '\0';
+	printf("client: packet contains: ");
+
+    for(int i = 0 ; i != numbytes ; i++){
+        printf("%c",buf[i]);
+    }
+    printf("\n");
+
+
+
+	freeaddrinfo(servinfo);
+
+	close(sockfd);
+}
 
 
 
