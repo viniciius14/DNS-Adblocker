@@ -16,37 +16,35 @@
 #define MAXBUFLEN 100
 
 
-void add_char(char to_add, char word[])
-{
-    if(strlen(word) == 0){
-        word = (char*)realloc(word, 1);
-        word[strlen(word)] = '\0';
-    }
-    word = (char*)realloc(word, strlen(word) + 1);
-    word[strlen(word) - 1] = to_add;
-}
+// void add_char(char to_add, char* word)
+// {
+//     if(strlen(word) == 0){
+//         word = (char*)realloc(word, 1);
+//         word[strlen(word)] = '\0';
+//     }
+//     word = (char*)realloc(word, strlen(word) + 1);
+//     word[strlen(word) - 1] = to_add;
+// }
 
 void get_clean_address(struct Message_Query *Q_ptr, char* address)
 {
-    char* a = Q_ptr->question.QNAME;
+    char *a = Q_ptr->question.QNAME;
     int i = 0, num = 0;
-    
+    char dot = '.';
     // Transform our 6google3com0 into google.com
     do
     {
         if (num == 0)
         {
-            num = a[i];
+            num = a[i] - '0' + 1;
             if(i != 0){
-                add_char('.', address);
+                strncat(address, &dot, 1);
             }
-            i++;
-            continue;
         }
-        add_char(a[i], address);
+        else{strncat(address, &a[i], 1);}
         i++;num--;
     }
-    while(a[i] != 0);
+    while(a[i] != '0');
 
 }
 
@@ -60,7 +58,7 @@ void get_ip_address(struct Message_Query *Q_ptr, char *ip_addr)
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;    
 
-    char* addr;
+    char* addr = (char*)malloc(sizeof(char));
     get_clean_address(Q_ptr, addr);
     
     if ((status = getaddrinfo(addr, NULL, &hints, &res)) != 0) {
@@ -69,17 +67,24 @@ void get_ip_address(struct Message_Query *Q_ptr, char *ip_addr)
     }
 
     // Will only work for IPv4
-    for(p = res;p != NULL; p = p->ai_next) {
+    // for(p = res; p != NULL; p = p->ai_next) {
+    //     void *addr;
+
+    //     struct sockaddr_in *ipv4 = (struct sockaddr_in *)p->ai_addr;
+    //     addr = &(ipv4->sin_addr);
+
+    //     // convert the IP to a string and print it:
+    //     inet_ntop(p->ai_family, addr, ipstr, sizeof ipstr);
+    // }
+    {// Will return info on the first element of the linked only
         void *addr;
-
-        struct sockaddr_in *ipv4 = (struct sockaddr_in *)p->ai_addr;
+        struct sockaddr_in *ipv4 = (struct sockaddr_in *)res->ai_addr;
         addr = &(ipv4->sin_addr);
-
         // convert the IP to a string and print it:
-        inet_ntop(p->ai_family, addr, ipstr, sizeof ipstr);
-    }
-
-    strcpy(ip_addr, ipstr);
+        inet_ntop(res->ai_family, addr, ipstr, sizeof ipstr);
+        strcpy(ip_addr, ipstr);
+        return;
+    } 
 }
 
 // This funcion will create our dns packet for replys
@@ -116,7 +121,7 @@ void create_packet(struct Message_Query *Q_ptr, struct Message_Response *R_ptr)
         .CLASS      = 0x01,     // Class: IN (0x0001)
         .TTL        = 0x3c,     // Time to live (1 minute)
         .RDLENGTH   = 0x04,     // length of RDATA
-        .RDATA      = ip_addr//{0xac, 0xd9, 0xa8, 0xae} // 4 octet ARPA Internet address
+        .RDATA      = ip_addr   //{0xac, 0xd9, 0xa8, 0xae} // 4 octet ARPA Internet address
     };
     struct Resource new_additional = {
         .NAME       = 0x00,     // <Root>
@@ -185,7 +190,7 @@ int main(void)
             .ARCOUNT    = 0x01      // Resource records in the additional records section
         },
         .question = {
-            .QNAME  = "googlecom",
+            .QNAME  = "6google3com0",
             .QTYPE  = 0x01,         // Type A
             .QCLASS = 0x01          // Class: IN (0x0001)
         },
@@ -252,6 +257,27 @@ int main(void)
         printf("%c",buf[i]);
     }
     printf("\n");
+
+    printf("Replying.\n");
+
+    struct Message_Response *response = (struct Message_Response*)malloc(sizeof(struct Message_Response));
+    create_packet(&SGQ, response);
+
+    printf("Made it here");
+
+    if ((numbytes = sendto(sockfd, response, sizeof(struct Message_Response), 0,
+            p->ai_addr, p->ai_addrlen)) == -1) {
+        perror("talker: sendto");
+        exit(1);
+    }
+
+    printf("server: response of %d bytes\n", numbytes);
+
+
+
+
+
+
 
 	close(sockfd);
 
