@@ -14,6 +14,7 @@
 #include <netdb.h>
 
 #define SERVERPORT "4950"	// the port users will be connecting to
+#define MAXBUFLEN 100
 
 int main(int argc, char *argv[])
 {
@@ -72,9 +73,41 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 
-	freeaddrinfo(servinfo);
+	//freeaddrinfo(servinfo);
 
 	printf("talker: sent %d bytes to %s\n", numbytes, argv[1]);
+
+
+
+	socklen_t addr_len;
+	struct sockaddr_storage their_addr;
+	char buf[MAXBUFLEN];
+	char s[INET6_ADDRSTRLEN];
+
+	addr_len = sizeof their_addr;
+	if ((numbytes = recvfrom(sockfd, buf, MAXBUFLEN-1 , 0,
+		(struct sockaddr *)&their_addr, &addr_len)) == -1) {
+		perror("recvfrom");
+		exit(1);
+	}	
+
+	printf("client: got packet from %s\n", 
+        inet_ntop(their_addr.ss_family, 
+        get_in_addr((struct sockaddr *)&their_addr), s, sizeof s));
+    
+	printf("client: packet is %d bytes long\n", numbytes);
+	buf[numbytes] = '\0';
+	printf("client: packet contains: ");
+
+    for(int i = 0 ; i != numbytes ; i++){
+        printf("%c",buf[i]);
+    }
+    printf("\n");
+
+
+
+	freeaddrinfo(servinfo);
+
 	close(sockfd);
 
 	return 0;

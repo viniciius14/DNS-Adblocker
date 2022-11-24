@@ -9,6 +9,7 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 
+
 #include "../Headers/dns_utils.h"
 
 
@@ -258,16 +259,22 @@ int main(void)
     }
     printf("\n");
 
+
+    //convert info sent into dns query and then create a response to it
+
+
+    //send response
+
     printf("Replying.\n");
 
     struct Message_Response *response = (struct Message_Response*)malloc(sizeof(struct Message_Response));
     create_packet(&SGQ, response);
-
-    printf("Made it here");
+    //convert packet to hex stream
+    //printf("Made it here");
 
     if ((numbytes = sendto(sockfd, response, sizeof(struct Message_Response), 0,
             p->ai_addr, p->ai_addrlen)) == -1) {
-        perror("talker: sendto");
+        perror("server: sendto");
         exit(1);
     }
 

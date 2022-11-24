@@ -1,0 +1,5 @@
+{
+    "files.associations": {
+        "dns_utils.h": "c"
+    }
+}
