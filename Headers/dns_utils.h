@@ -69,7 +69,6 @@ struct __attribute__((__packed__)) Message_Response
 
 
 
-//generic await to receive function -> server
 void *get_in_addr(struct sockaddr *sa)
 {
 	if (sa->sa_family == AF_INET) {
@@ -102,13 +101,13 @@ void *await_receive(char buf[MAXBUFLEN])
 	// loop through all the results and bind to the first we can
 	for(p = servinfo; p != NULL; p = p->ai_next) {
 		if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1) {
-			perror("server: socket");
+			perror("socket");
 			continue;
 		}
 
 		if (bind(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
 			close(sockfd);
-			perror("server: bind");
+			perror("bind");
 			continue;
 		}
 
@@ -116,28 +115,94 @@ void *await_receive(char buf[MAXBUFLEN])
 	}
 
 	if (p == NULL) {
-		fprintf(stderr, "server: failed to bind socket\n");
+		fprintf(stderr, "failed to bind socket\n");
 		return NULL;
 	}
 
 	freeaddrinfo(servinfo);
 
-	printf("server: waiting to recvfrom...\n");
+	printf("waiting to recvfrom...\n");
 
     if ((numbytes = recvfrom(sockfd, buf, MAXBUFLEN-1 , 0, (struct sockaddr *)&their_addr, &addr_len)) == -1) {
 		perror("recvfrom");
 		exit(1);
 	}
 
-	printf("server: got packet from %s\n", inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof s));
-	printf("server: packet is %d bytes long\n", numbytes);
+	printf("got packet from %s\n", inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof s));
+	printf("packet is %d bytes long\n", numbytes);
 	buf[numbytes] = '\0';
-    printf("server: packet contents in a hex stream ");
+    printf("packet contents in a hex stream ");
     for(int i = 0 ; i != numbytes ; i++){
         printf("%x",buf[i]);
     }
     printf("\n");
 }
+
+void* dns_send(unsigned char *reply, size_t size)
+{
+
+
+	/*----------------------------------------------*/
+	//if the reply array is all continuos in memory
+	//this will work else it wont
+
+	unsigned char n_reply[size];
+
+    for(int i = 0 ; i != size ; i++){
+		n_reply[i] = reply[i];
+	}
+
+	/*----------------------------------------------*/
+
+    int sockfd, rv, numbytes;
+	struct addrinfo hints, *servinfo, *p;
+
+	memset(&hints, 0, sizeof hints);
+	hints.ai_family = AF_INET6; // set to AF_INET to use IPv4
+	hints.ai_socktype = SOCK_DGRAM;
+
+	if ((rv = getaddrinfo("::1", PORT, &hints, &servinfo)) != 0) {
+		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
+		return NULL;
+	}
+
+	// loop through all the results and make a socket
+	for(p = servinfo; p != NULL; p = p->ai_next) {
+		if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1) {
+			perror("socket");
+			continue;
+		}
+
+		break;
+	}
+
+	if (p == NULL) {
+		fprintf(stderr, "failed to create socket\n");
+		return NULL;
+	}
+
+	if ((numbytes = sendto(sockfd, n_reply, sizeof(n_reply), 0, p->ai_addr, p->ai_addrlen)) == -1) {
+		perror("sendto");
+		exit(1);
+	}
+
+	freeaddrinfo(servinfo);
+
+	printf("sent %d bytes to localhost\n", numbytes);
+	close(sockfd);
+ 
+}
+
+
+#endif
+
+
+
+
+
+
+
+
 
 
 
@@ -165,7 +230,7 @@ void *await_receive(char buf[MAXBUFLEN])
 // 	// loop through all the results and make a socket
 // 	for(p = servinfo; p != NULL; p = p->ai_next) {
 // 		if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1) {
-// 			perror("server: socket");
+// 			perror("socket");
 // 			continue;
 // 		}
 
@@ -173,100 +238,20 @@ void *await_receive(char buf[MAXBUFLEN])
 // 	}
 
 // 	if (p == NULL) {
-// 		fprintf(stderr, "server: failed to create socket\n");
+// 		fprintf(stderr, "failed to create socket\n");
 // 		return NULL;
 // 	}
 
 // 	if ((numbytes = sendto(sockfd, reply, sizeof(reply), 0, p->ai_addr, p->ai_addrlen)) == -1) {
-// 		perror("server: sendto");
+// 		perror("sendto");
 // 		exit(1);
 // 	}
 
 // 	//freeaddrinfo(servinfo);
 
-// 	printf("server: sent %d bytes to localhost\n", numbytes);
+// 	printf("sent %d bytes to localhost\n", numbytes);
 
 // }
-
-
-
-
-
-
-
-void* respond(unsigned char *reply, size_t size)
-{
-    //find a way that we get the contents of reply in here
-    char n_reply[size];
-    strcpy(n_reply, reply);
-    printf("\n\n");
-    for(int i = 0 ; n_reply[i] != '\0' ; i++){
-        printf("%x",n_reply[i]);
-    }
-    
-    int sockfd, rv, numbytes;
-	struct addrinfo hints, *servinfo, *p;
-
-	memset(&hints, 0, sizeof hints);
-	hints.ai_family = AF_INET6; // set to AF_INET to use IPv4
-	hints.ai_socktype = SOCK_DGRAM;
-
-	if ((rv = getaddrinfo("::1", PORT, &hints, &servinfo)) != 0) {
-		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
-		return NULL;
-	}
-
-	// loop through all the results and make a socket
-	for(p = servinfo; p != NULL; p = p->ai_next) {
-		if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1) {
-			perror("server: socket");
-			continue;
-		}
-
-		break;
-	}
-
-	if (p == NULL) {
-		fprintf(stderr, "server: failed to create socket\n");
-		return NULL;
-	}
-
-	if ((numbytes = sendto(sockfd, reply, strlen(reply), 0, p->ai_addr, p->ai_addrlen)) == -1) {
-		perror("server: sendto");
-		exit(1);
-	}
-
-	freeaddrinfo(servinfo);
-
-	printf("server: sent %d bytes\n", numbytes);
-	close(sockfd);
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#endif
-
-
-
-
-
-
-
-
-
-
 
 
 
