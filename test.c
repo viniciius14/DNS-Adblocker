@@ -17,7 +17,7 @@ int main(void){
 
    
         char buffer[100];
-        if(await_receive(buffer) == NULL)
+        if(await_receive(buffer) != 0)
         {
             exit(1);
         } 
@@ -42,7 +42,7 @@ int main(void){
 
 
 
-        if(dns_send(reply, sizeof(reply)) == NULL){
+        if(dns_send(reply, sizeof(reply)) != 0){
             exit(1);
         }
     }
