@@ -3,7 +3,7 @@
 
 
 #include "Headers/dns_utils.h"
-
+#include <unistd.h>
 
 int main(void){
 
@@ -29,9 +29,13 @@ int main(void){
 
 
 
+
+    sleep(1);
+
     char buffer[100];
-    if(await_receive(buffer) == NULL)
+    if(await_receive(buffer) != 0)
     {
+        printf("await was NULL");
         exit(1);
     } 
 

@@ -7,44 +7,6 @@
 #include "Headers/dns_utils.h"
 
 
-    // void* last;
-
-    // printf("sizeof array   -----> %ld\n",sizeof(reply));
-
-
-    // for(int i = 0 ; i != sizeof(reply) ; i++){
-    //     printf("%p -----> %x \n", &(reply[i]), reply[i]);
-    //     last = &reply[i];
-    // }
-
-    // foo(reply, sizeof(reply));
-
-
-
-// void *foo(unsigned char *reply, size_t size){
-//     void* last;
-
-//     printf("sizeof array   -----> %ld\n",sizeof(reply));/// not the actual size, sizeof pointer
-
-
-//     for(int i = 0 ; i != size; i++){
-//         printf(" -----> %x \n",  reply[i]);
-//         last = &reply[i];
-//     }
-
-//     unsigned char n_reply[size];
-
-//     printf("\n\n\n");
-//     for(int i = 0 ; i != size ; i++){
-// 		n_reply[i] = reply[i];
-// 	}
-
-//     for(int i = 0 ; i != size; i++){
-//         printf(" -----> %x \n", n_reply[i]);
-//     }
-
-// }
-
 
 
 
@@ -78,10 +40,64 @@ int main(void){
         //create_reply(buffer, reply);
 
 
-    
+
 
         if(dns_send(reply, sizeof(reply)) == NULL){
             exit(1);
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// void* last;
+
+// printf("sizeof array   -----> %ld\n",sizeof(reply));
+
+
+// for(int i = 0 ; i != sizeof(reply) ; i++){
+//     printf("%p -----> %x \n", &(reply[i]), reply[i]);
+//     last = &reply[i];
+// }
+
+// foo(reply, sizeof(reply));
+
+
+
+// void *foo(unsigned char *reply, size_t size){
+//     void* last;
+
+//     printf("sizeof array   -----> %ld\n",sizeof(reply));/// not the actual size, sizeof pointer
+
+
+//     for(int i = 0 ; i != size; i++){
+//         printf(" -----> %x \n",  reply[i]);
+//         last = &reply[i];
+//     }
+
+//     unsigned char n_reply[size];
+
+//     printf("\n\n\n");
+//     for(int i = 0 ; i != size ; i++){
+// 		n_reply[i] = reply[i];
+// 	}
+
+//     for(int i = 0 ; i != size; i++){
+//         printf(" -----> %x \n", n_reply[i]);
+//     }
+
+// }
+
+
+
