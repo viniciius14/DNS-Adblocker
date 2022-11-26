@@ -16,7 +16,7 @@ int main(void){
     for(;;){
 
    
-        char buffer[100];
+        unsigned char buffer[100];
         if(await_receive(buffer) != 0)
         {
             exit(1);
