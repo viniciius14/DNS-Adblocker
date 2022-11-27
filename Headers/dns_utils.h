@@ -68,9 +68,9 @@ struct __attribute__((__packed__)) Message_Response
 
 void *get_in_addr(struct sockaddr *sa);
 
-int await_receive(char buf[MAXBUFLEN]);
+int await_receive(struct Message_Query buf);
 
-int dns_send(unsigned char *reply, size_t size);
+int dns_send(struct Message_Response response, size_t size);
 
 
 #endif

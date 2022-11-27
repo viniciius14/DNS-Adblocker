@@ -13,7 +13,13 @@ void *get_in_addr(struct sockaddr *sa)
 	return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
-int await_receive(char buf[MAXBUFLEN])
+
+
+
+
+
+
+int await_receive(struct Message_Query buf)
 {
     int sockfd, rv, numbytes;
 	char s[INET6_ADDRSTRLEN];    
@@ -28,7 +34,7 @@ int await_receive(char buf[MAXBUFLEN])
 	hints.ai_socktype = SOCK_DGRAM;
 	hints.ai_flags = AI_PASSIVE; // use my IP
 
-	if ((rv = getaddrinfo(NULL, PORT, &hints, &servinfo)) != 0) {
+	if ((rv = getaddrinfo("::1", PORT, &hints, &servinfo)) != 0) {
 		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
 		return 1;
 	}
@@ -58,38 +64,24 @@ int await_receive(char buf[MAXBUFLEN])
 
 	printf("waiting to recvfrom...\n");
 
-    if ((numbytes = recvfrom(sockfd, buf, MAXBUFLEN-1 , 0, (struct sockaddr *)&their_addr, &addr_len)) == -1) {
+    if ((numbytes = recvfrom(sockfd, &buf, MAXBUFLEN-1 , 0, (struct sockaddr *)&their_addr, &addr_len)) == -1) {
 		perror("recvfrom");
 		exit(1);
 	}
 
 	printf("got packet from %s\n", inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof s));
 	printf("packet is %d bytes long\n", numbytes);
-	buf[numbytes] = '\0';
-    printf("packet contents in a hex stream ");
-    for(int i = 0 ; i != numbytes ; i++){
-        printf("%x",buf[i]);
-    }
-    printf("\n");
+
+    // printf("packet contents in a hex stream ");
+    // for(int i = 0 ; i != numbytes ; i++){
+    //     printf("%x",buf[i]);
+    // }
+    // printf("\n");
 	return 0;
 }
 
-int dns_send(unsigned char *reply, size_t size)
+int dns_send(struct Message_Response response, size_t size)
 {
-
-
-	/*----------------------------------------------*/
-	//if the reply array is all continuos in memory
-	//this will work else it wont
-
-	unsigned char n_reply[size];
-
-    for(int i = 0 ; i != size ; i++){
-		n_reply[i] = reply[i];
-	}
-
-	/*----------------------------------------------*/
-
     int sockfd, rv, numbytes;
 	struct addrinfo hints, *servinfo, *p;
 
@@ -117,7 +109,7 @@ int dns_send(unsigned char *reply, size_t size)
 		return 2;
 	}
 
-	if ((numbytes = sendto(sockfd, n_reply, sizeof(n_reply), 0, p->ai_addr, p->ai_addrlen)) == -1) {
+	if ((numbytes = sendto(sockfd, &response, sizeof(response), 0, p->ai_addr, p->ai_addrlen)) == -1) {
 		perror("sendto");
 		exit(1);
 	}
