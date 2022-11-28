@@ -1,20 +1,9 @@
-#include "Headers/dns_utils.h"
-
-
-
-
-
-
-
-
-
-
-
+#include "../Headers/dns_utils.h"
 
 
 int main(void){
 
-    struct Message_Query buf;
+    struct Message_Query *buf = (struct Message_Query*)malloc(sizeof(struct Message_Query));
 
     if(await_receive(buf) != 0)
     {
@@ -69,7 +58,7 @@ int main(void){
 
 
 
-    if(dns_send(SGA, sizeof(SGA)) != 0){
+    if(dns_send(&SGA, sizeof(SGA)) != 0){
         exit(1);
     }
 }

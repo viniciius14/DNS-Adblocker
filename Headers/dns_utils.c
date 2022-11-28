@@ -13,13 +13,7 @@ void *get_in_addr(struct sockaddr *sa)
 	return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
-
-
-
-
-
-
-int await_receive(struct Message_Query buf)
+int await_receive(struct Message_Query *buf)
 {
     int sockfd, rv, numbytes;
 	char s[INET6_ADDRSTRLEN];    
@@ -80,7 +74,7 @@ int await_receive(struct Message_Query buf)
 	return 0;
 }
 
-int dns_send(struct Message_Response response, size_t size)
+int dns_send(struct Message_Response *response, size_t size)
 {
     int sockfd, rv, numbytes;
 	struct addrinfo hints, *servinfo, *p;
@@ -121,17 +115,3 @@ int dns_send(struct Message_Response response, size_t size)
 	
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
