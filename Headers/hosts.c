@@ -8,7 +8,7 @@ struct Line{
 
 
 
-void read_line(char *host){
+char *read_line(char *host){
 
     FILE *fp = fopen("../Hosts/hosts.txt","r");
 
@@ -21,7 +21,12 @@ void read_line(char *host){
     }
     else{
         memset(buffer, 0, sizeof(buffer));
+        return NULL;
     }
+
+    char a[] ={(char)line.ip1,'.',(char)line.ip2,'.',(char)line.ip3,'.',(char)line.ip4};
+
+
 
 
 }

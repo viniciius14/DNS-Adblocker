@@ -2,7 +2,7 @@
 #define HOSTS_H
 
 #include <stdio.h>
-void read_line(char *host);
+char *read_line(char *host);
 //ler a linha %.d.%d.%d.%d %s
 //se a linha comecar com um # ignorar
 
