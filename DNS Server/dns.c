@@ -3,7 +3,9 @@
 
 int main(void){
 
-    struct Message_Query *buf = (struct Message_Query*)malloc(sizeof(struct Message_Query));
+    //struct Message_Query *buf = (struct Message_Query*)malloc(sizeof(struct Message_Query));
+
+    unsigned char buf[100];
 
     if(await_receive(buf) != 0)
     {
