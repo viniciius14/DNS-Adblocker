@@ -1,3 +1,6 @@
+/*
+Header for interpretation of hosts file and all things hosts file related
+*/
 #ifndef HOSTS_H
 #define HOSTS_H
 
