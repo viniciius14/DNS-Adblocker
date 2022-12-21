@@ -7,15 +7,17 @@ struct Line{
 
 
 
-
-char *read_line(char *host){
+//will only read 1 line, returns NULL if if comment or EOF else returns struct Line
+struct Line *read_line(char *host){
 
     FILE *fp = fopen("../Hosts/hosts.txt","r");
 
 
     struct Line line;
     char buffer[250];
+
     fgets(buffer, sizeof(buffer), fp);
+
     if(buffer[0] != '#'){
         sscanf(buffer, "%.d.%d.%d.%d %[^\n] \n", line.ip1, line.ip2, line.ip3, line.ip4, line.host_name);
     }
@@ -24,7 +26,7 @@ char *read_line(char *host){
         return NULL;
     }
 
-    char a[] ={(char)line.ip1,'.',(char)line.ip2,'.',(char)line.ip3,'.',(char)line.ip4};
+    char ip[] ={(char)line.ip1,'.',(char)line.ip2,'.',(char)line.ip3,'.',(char)line.ip4};
 
 
 
