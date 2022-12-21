@@ -25,8 +25,8 @@ struct __attribute__((__packed__)) Header
     __uint16_t TC : 1;
     __uint16_t RD : 1;
     __uint16_t RA : 1;
-    __uint16_t Z : 3;
-    __uint16_t RCODE : 4;
+    __uint16_t Z  : 3;
+    __uint16_t RCODE  : 4;
     __uint16_t QDCOUNT;
     __uint16_t ANCOUNT;
     __uint16_t NSCOUNT;
@@ -65,12 +65,20 @@ struct __attribute__((__packed__)) Message_Response
     struct Resource additional;
 };
 
-
 void *get_in_addr(struct sockaddr *sa);
 
 int await_receive(unsigned char *buf);
 
 int dns_send(unsigned char *buf, size_t size);
+
+int encode_hostname(char *dest, char *hostname);
+int decode_hostname(char *src, char **hostname);
+
+
+
+// uint16_t dns_header_flags_encode(dns_header_flags_t flags);
+
+// dns_header_flags_t dns_header_flags_decode(uint16_t value);
 
 
 #endif

@@ -115,3 +115,63 @@ int dns_send(unsigned char *buf, size_t size)
 	
 	return 0;
 }
+
+
+
+
+
+int encode_hostname(char *dest, char *hostname) {
+    // www.google.com
+    //  3www
+    //  6google
+    //  3com
+    //  0
+    char *token = strtok(hostname, ".");
+
+    int len = 0;
+    int offset = 0;
+    while (token != NULL) {
+        len = strlen(token);
+        dest[offset] = len;
+        offset++;
+        strncpy(dest+offset, token, len);
+        offset += len;
+        token = strtok(NULL, ".");
+    }
+    dest[offset] = 0;
+    return offset+1;
+}
+
+
+int decode_hostname(char *src, char **hostname) {
+    int len = 0;
+    while (src[len] != 0) {
+        if (len > 0) (*hostname)[len-1] ='.';
+        *hostname = realloc(*hostname, src[len]+1);
+        memcpy(*hostname+len, src+len+1, src[len]);
+        len+=src[len]+1;
+    }
+    (*hostname)[len]='\0';
+    return len+1;
+}
+
+
+// // flags to uint16_t encoder
+// uint16_t dns_header_flags_encode(dns_header_flags_t flags) {
+//     return (uint16_t) ((flags.qr << 15) | (flags.opcode << 11) | (flags.aa << 10) | (flags.tc << 9) | (flags.rd << 8) |
+//                        (flags.ra << 7) | (flags.z << 4) | flags.rcode);
+// }
+
+// // uint16_t to flags decoder
+// dns_header_flags_t dns_header_flags_decode(uint16_t value) {
+//     dns_header_flags_t flags;
+//     flags.qr = (value >> 15)&1;
+//     flags.opcode = (value >> 11)&15;
+//     flags.aa = (value >> 10)&1;
+//     flags.tc = (value >> 9)&1;
+//     flags.rd = (value >> 8)&1;
+//     flags.ra = (value >> 7)&1;
+//     flags.z = (value >> 4)&7;
+//     flags.rcode = value&15;
+//     return flags;
+// }
