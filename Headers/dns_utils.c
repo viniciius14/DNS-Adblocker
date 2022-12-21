@@ -122,10 +122,10 @@ int dns_send(unsigned char *buf, size_t size)
 
 int encode_hostname(char *dest, char *hostname) {
     // www.google.com
-    //  3www
-    //  6google
-    //  3com
-    //  0
+    // 3www
+    // 6google
+    // 3com
+    // 0
     char *token = strtok(hostname, ".");
 
     int len = 0;
@@ -146,7 +146,7 @@ int encode_hostname(char *dest, char *hostname) {
 int decode_hostname(char *src, char **hostname) {
     int len = 0;
     while (src[len] != 0) {
-        if (len > 0) (*hostname)[len-1] ='.';
+        if (len > 0) (*hostname)[len-1] = '.';
         *hostname = realloc(*hostname, src[len]+1);
         memcpy(*hostname+len, src+len+1, src[len]);
         len+=src[len]+1;

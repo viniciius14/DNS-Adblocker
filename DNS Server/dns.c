@@ -66,7 +66,16 @@ int main(void){
 }
 
 
+/*
 
+await receive
+analyse
+either return the ip of http or make a dns query 
+to return ip we must be able to create a packet for that ip
+must be able to "just foward" the return of the 3rd party dns query
+
+
+*/
 
 
 

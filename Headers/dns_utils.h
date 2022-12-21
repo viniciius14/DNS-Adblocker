@@ -15,7 +15,7 @@
 #include "dns_utils.c"
 
 
-a
+
 struct __attribute__((__packed__)) Header
 {
     __uint16_t ID;      
@@ -71,10 +71,9 @@ int await_receive(unsigned char *buf);
 
 int dns_send(unsigned char *buf, size_t size);
 
+
 int encode_hostname(char *dest, char *hostname);
 int decode_hostname(char *src, char **hostname);
-
-
 
 // uint16_t dns_header_flags_encode(dns_header_flags_t flags);
 
