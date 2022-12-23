@@ -65,6 +65,8 @@ struct __attribute__((__packed__)) Message_Response
     struct Resource additional;
 };
 
+
+
 void *get_in_addr(struct sockaddr *sa);
 
 int await_receive(unsigned char *buf);

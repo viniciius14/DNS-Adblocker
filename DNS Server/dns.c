@@ -46,8 +46,8 @@ int main(void){
     //     },
     //     .question = {
     //         .QNAME      = "googlecom",
-    //         .QTYPE      = 0x01,     // Type A
-    //         .QCLASS     = 0x01      // Class: IN (0x0001)
+    //         .QTYPE      = 0x01,         // Type A
+    //         .QCLASS     = 0x01          // Class: IN (0x0001)
     //     },
     //     .answer = {
     //         .NAME       = "googlecom",
@@ -55,7 +55,7 @@ int main(void){
     //         .CLASS      = 0x01,         // Class: IN (0x0001)
     //         .TTL        = 0x54,         // 84 seconds
     //         .RDLENGTH   = 0x04,         // length of RDATA
-    //         .RDATA      = "0xacd9a8ae"    // 4 octet ARPA Internet address
+    //         .RDATA      = "0xacd9a8ae"  // 4 octet ARPA Internet address
     //     },
     //     .additional = {
     //             .NAME       = 0x00,     // <Root>
@@ -65,7 +65,7 @@ int main(void){
     //             //EDNS0 version: 0
     //             .TTL        = 0x00,     // Mot specified
     //             .RDLENGTH   = 0x0c,     // Length of RDATA
-    //             .RDATA      = 0x00      // Mot specified
+    //             .RDATA      = 0x00      // Not specified
     //         }
     // };
     //char reply[100];
@@ -88,54 +88,3 @@ must be able to "just foward" the return of the 3rd party dns query
 
 
 */
-
-
-
-
-
-
-
-
-
-
-
-// void* last;
-
-// printf("sizeof array   -----> %ld\n",sizeof(reply));
-
-
-// for(int i = 0 ; i != sizeof(reply) ; i++){
-//     printf("%p -----> %x \n", &(reply[i]), reply[i]);
-//     last = &reply[i];
-// }
-
-// foo(reply, sizeof(reply));
-
-
-
-// void *foo(unsigned char *reply, size_t size){
-//     void* last;
-
-//     printf("sizeof array   -----> %ld\n",sizeof(reply));/// not the actual size, sizeof pointer
-
-
-//     for(int i = 0 ; i != size; i++){
-//         printf(" -----> %x \n",  reply[i]);
-//         last = &reply[i];
-//     }
-
-//     unsigned char n_reply[size];
-
-//     printf("\n\n\n");
-//     for(int i = 0 ; i != size ; i++){
-// 		n_reply[i] = reply[i];
-// 	}
-
-//     for(int i = 0 ; i != size; i++){
-//         printf(" -----> %x \n", n_reply[i]);
-//     }
-
-// }
-
-
-
