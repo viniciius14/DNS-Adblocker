@@ -16,17 +16,26 @@ int main(void){
         }
 
 
-        for(int i = 0 ; i != size ; i++){
-            printf("%x",buf[i]);
-        }
+        // for(int i = 0 ; i != size ; i++){
+        //     printf("%x",buf[i]);
+        // }
+        // printf("\n");
 
         //now we decode
         //find whats been asked
 
-        struct Header *header = (struct Header*)(buf);
-        struct Header_Flags flags;
+        
 
-        flags = dns_header_flags_decode(header->FLAGS);
+        struct Header *header = (struct Header*)(buf);
+
+
+        struct Header_Flags flags = decode_header_flags(header->FLAGS);
+
+
+        //flags = decode_header_flags(header->FLAGS);
+
+        // flags = decode_header_flags(header->FLAGS);
+
 
         printf("Transaction ID: %04X\n", ntohs(header->ID));
         printf("Response: %1d\n", flags.QR);
@@ -50,7 +59,7 @@ int main(void){
         //and then send it
 
 
-        
+        break;
         if(dns_send(buf, sizeof(buf)) != 0)
         {
             exit(1);
