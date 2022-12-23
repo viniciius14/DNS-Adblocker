@@ -22,6 +22,22 @@ int main(void){
 
         //now we decode
         //find whats been asked
+
+        struct Header *header = (struct Header*)(buf);
+        struct Header_Flags flags;
+
+        flags = dns_header_flags_decode(header->FLAGS);
+
+        printf("Transaction ID: %04X\n", ntohs(header->ID));
+        printf("Response: %1d\n", flags.QR);
+        printf("Number of questions: %d\n", ntohs(header->QDCOUNT));
+        printf("Number of answers: %d\n", ntohs(header->ANCOUNT));
+
+
+
+
+
+
         struct Header *header = malloc(sizeof(struct Header));
         
         memcpy(header, buf, sizeof(struct Header));

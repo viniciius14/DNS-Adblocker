@@ -173,15 +173,8 @@ uint16_t dns_header_flags_encode(struct Header_Flags flags) {
 	);
 }
 
-
-
-
-
-
-
-
 // uint16_t to flags decoder
-struct Header_Flags dns_header_flags_decode(uint16_t value) 
+struct Header_Flags dns_header_flags_decode(__uint16_t value) 
 {
     struct Header_Flags flags;
 
