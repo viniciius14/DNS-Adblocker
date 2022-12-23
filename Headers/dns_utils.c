@@ -1,3 +1,5 @@
+#ifndef DNS_UTILS_C
+#define DNS_UTILS_C
 #include "../Headers/dns_utils.h"
 
 #define PORT "4950" //change to 53
@@ -236,3 +238,7 @@ struct Header_Flags decode_header_flags(__uint16_t value)
 
 	return flags;
 }
+
+
+
+#endif

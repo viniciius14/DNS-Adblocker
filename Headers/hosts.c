@@ -1,3 +1,5 @@
+#ifndef HOSTS_C
+#define HOSTS_C
 #include "../Headers/hosts.h"
 
 
@@ -38,3 +40,8 @@ int main(){
         printf("found!\n%s",a);
     }
 }
+
+
+
+
+#endif
