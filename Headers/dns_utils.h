@@ -55,12 +55,6 @@ struct __attribute__((__packed__)) Header
     __uint16_t ARCOUNT;
 };
 
-
-
-
-
-
-
 struct __attribute__((__packed__)) Question
 {
     char *QNAME;
@@ -107,8 +101,7 @@ int decode_hostname(char *src, char **hostname);
 
 __uint16_t dns_header_flags_encode(struct Header_Flags flags);
 
-struct Header_Flags dns_header_flags_decode(uint16_t value);
-
+struct Header_Flags dns_header_flags_decode(__uint16_t value);
 
 #endif
 

@@ -159,33 +159,33 @@ int decode_hostname(char *src, char **hostname) {
 
 
 // flags to uint16_t encoder
-uint16_t dns_header_flags_encode(struct Header_Flags flags) {
-    return (uint16_t) 
-	(
-		(flags.QR 		<< 15) 	|
-		(flags.OPCODE 	<< 11)	|
-		(flags.AA 		<< 10)	|
-		(flags.TC 		<< 9 ) 	|
-		(flags.RD 		<< 8 ) 	|
-		(flags.RA 		<< 7 ) 	|
-		(flags.Z 		<< 4 ) 	|
-		(flags.RCODE 	<< 0 )
-	);
-}
+// __uint16_t dns_header_flags_encode(struct Header_Flags flags) {
+//     return (__uint16_t) 
+// 	(
+// 		(flags.QR 		<< 15) 	|
+// 		(flags.OPCODE 	<< 11)	|
+// 		(flags.AA 		<< 10)	|
+// 		(flags.TC 		<< 9 ) 	|
+// 		(flags.RD 		<< 8 ) 	|
+// 		(flags.RA 		<< 7 ) 	|
+// 		(flags.Z 		<< 4 ) 	|
+// 		(flags.RCODE 	<< 0 )
+// 	);
+// }
 
-// uint16_t to flags decoder
-struct Header_Flags dns_header_flags_decode(__uint16_t value) 
-{
-    struct Header_Flags flags;
+// // uint16_t to flags decoder
+// struct Header_Flags dns_header_flags_decode(__uint16_t value) 
+// {
+//     struct Header_Flags *flags = (struct Header_Flags*)malloc(sizeof(struct Header_Flags));
 
-	flags.QR 	 = (value >> 15) &1 ;
-    flags.OPCODE = (value >> 11) &15;
-    flags.AA 	 = (value >> 10) &1 ;
-    flags.TC 	 = (value >> 9 ) &1 ;
-    flags.RD 	 = (value >> 8 ) &1 ;
-    flags.RA 	 = (value >> 7 ) &1 ;
-    flags.Z 	 = (value >> 4 ) &7 ;
-    flags.RCODE  = (value >> 0 ) &15;
+// 	flags->QR 	 = (value >> 15) &1 ;
+//     flags->OPCODE = (value >> 11) &15;
+//     flags->AA 	 = (value >> 10) &1 ;
+//     flags->TC 	 = (value >> 9 ) &1 ;
+//     flags->RD 	 = (value >> 8 ) &1 ;
+//     flags->RA 	 = (value >> 7 ) &1 ;
+//     flags->Z 	 = (value >> 4 ) &7 ;
+//     flags->RCODE  = (value >> 0 ) &15;
 
-	return flags;
-}
+// 	return *flags;
+// }

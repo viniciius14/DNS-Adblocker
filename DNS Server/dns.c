@@ -38,9 +38,9 @@ int main(void){
 
 
 
-        struct Header *header = malloc(sizeof(struct Header));
+        //struct Header *header = malloc(sizeof(struct Header));
         
-        memcpy(header, buf, sizeof(struct Header));
+        //memcpy(header, buf, sizeof(struct Header));
 
 
 
