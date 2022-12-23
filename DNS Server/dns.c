@@ -6,16 +6,33 @@ int main(void){
     //struct Message_Query *buf = (struct Message_Query*)malloc(sizeof(struct Message_Query));
 
     unsigned char buf[100];
-
+    int size = 0;
 
     while(1)
     {
-        if(await_receive(buf) != 0)
+        if((size = await_receive(buf)) == 0)
         {
             exit(1);
         }
+
+
+        for(int i = 0 ; i != size ; i++){
+            printf("%x",buf[i]);
+        }
+
+        //now we decode
+        //find whats been asked
+        struct Header *header = malloc(sizeof(struct Header));
         
-        printf("\n\n INSIDE DNS.C BUF == %s\n\n",buf);
+        memcpy(header, buf, sizeof(struct Header));
+
+
+
+
+        
+        //create a reply struct
+        //and then send it
+
 
         
         if(dns_send(buf, sizeof(buf)) != 0)

@@ -16,9 +16,25 @@
 
 
 
-struct __attribute__((__packed__)) Header
+// struct __attribute__((__packed__)) Header
+// {
+//     __uint16_t ID;      
+//     __uint16_t QR : 1;
+//     __uint16_t OPCODE : 4;
+//     __uint16_t AA : 1;
+//     __uint16_t TC : 1;
+//     __uint16_t RD : 1;
+//     __uint16_t RA : 1;
+//     __uint16_t Z  : 3;
+//     __uint16_t RCODE  : 4;
+//     __uint16_t QDCOUNT;
+//     __uint16_t ANCOUNT;
+//     __uint16_t NSCOUNT;
+//     __uint16_t ARCOUNT;
+// };
+
+struct __attribute__((__packed__)) Header_Flags
 {
-    __uint16_t ID;      
     __uint16_t QR : 1;
     __uint16_t OPCODE : 4;
     __uint16_t AA : 1;
@@ -27,11 +43,23 @@ struct __attribute__((__packed__)) Header
     __uint16_t RA : 1;
     __uint16_t Z  : 3;
     __uint16_t RCODE  : 4;
+};
+
+struct __attribute__((__packed__)) Header
+{
+    __uint16_t ID;
+    __uint16_t FLAGS;
     __uint16_t QDCOUNT;
     __uint16_t ANCOUNT;
     __uint16_t NSCOUNT;
     __uint16_t ARCOUNT;
 };
+
+
+
+
+
+
 
 struct __attribute__((__packed__)) Question
 {
@@ -77,9 +105,9 @@ int dns_send(unsigned char *buf, size_t size);
 int encode_hostname(char *dest, char *hostname);
 int decode_hostname(char *src, char **hostname);
 
-// uint16_t dns_header_flags_encode(dns_header_flags_t flags);
+__uint16_t dns_header_flags_encode(struct Header_Flags flags);
 
-// dns_header_flags_t dns_header_flags_decode(uint16_t value);
+struct Header_Flags dns_header_flags_decode(uint16_t value);
 
 
 #endif
