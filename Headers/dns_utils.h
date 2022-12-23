@@ -13,7 +13,7 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 
-#include "dns_utils.c"
+#include "../Headers/dns_utils.c"
 
 
 // struct __attribute__((__packed__)) Header
