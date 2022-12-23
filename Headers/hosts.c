@@ -1,34 +1,37 @@
 #include "hosts.h"
 
-struct Line{
-    int ip1, ip2, ip3, ip4;
-    char *host_name;
-};
+
+
+char *find_host(const char *hostname)
+{
+    FILE *fp = fopen("../hosts/hosts.txt","r");
+    if(!fp) goto error;
 
 
 
-//will only read 1 line, returns NULL if if comment or EOF else returns struct Line
-struct Line *read_line(char *host){
+    while(1){
+        char temp[250];
+        char *ip, *temp_host, *token, delim[] = " \t\n";;
+        
 
-    FILE *fp = fopen("../Hosts/hosts.txt","r");
+        fgets(temp, sizeof(temp), fp);
+        if(!fgets) goto error;
 
+        if(temp[0] == '#' || temp[0] == '\n')continue;
+        
+        
 
-    struct Line line;
-    char buffer[250];
-
-    fgets(buffer, sizeof(buffer), fp);
-
-    if(buffer[0] != '#'){
-        sscanf(buffer, "%.d.%d.%d.%d %[^\n] \n", line.ip1, line.ip2, line.ip3, line.ip4, line.host_name);
+        char *ptr = strtok(temp, delim);
+        ip = ptr;
+        ptr = strtok(NULL, delim);
+        temp_host = ptr;
+        
+        if(*temp_host == *hostname){
+            return ip;
+        }
     }
-    else{
-        memset(buffer, 0, sizeof(buffer));
-        return NULL;
-    }
 
-    char ip[] ={(char)line.ip1,'.',(char)line.ip2,'.',(char)line.ip3,'.',(char)line.ip4};
-
-
-
-
+error:
+    fclose(fp);
+    return NULL;  
 }

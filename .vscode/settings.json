@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "dns_utils.h": "c"
+        "dns_utils.h": "c",
+        "stdio.h": "c"
     }
 }
