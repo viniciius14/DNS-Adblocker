@@ -37,7 +37,7 @@ int await_receive(unsigned char *buf)
 	socklen_t addr_len;
 
 	memset(&hints, 0, sizeof hints);
-	hints.ai_family = AF_INET6; // set to AF_INET to use IPv4
+	hints.ai_family = AF_INET6; 
 	hints.ai_socktype = SOCK_DGRAM;
 	hints.ai_flags = AI_PASSIVE; // use my IP
 
@@ -95,7 +95,7 @@ int dns_send(unsigned char *buf, size_t size)
 	struct addrinfo hints, *servinfo, *p;
 
 	memset(&hints, 0, sizeof hints);
-	hints.ai_family = AF_INET6; // set to AF_INET to use IPv4
+	hints.ai_family = AF_INET6;
 	hints.ai_socktype = SOCK_DGRAM;
 
 	if ((rv = getaddrinfo("::1", PORT, &hints, &servinfo)) != 0) {
@@ -118,7 +118,7 @@ int dns_send(unsigned char *buf, size_t size)
 		return 2;
 	}
 
-	if ((numbytes = sendto(sockfd, &buf, size, 0, p->ai_addr, p->ai_addrlen)) == -1) {
+	if ((numbytes = sendto(sockfd, buf, size, 0, p->ai_addr, p->ai_addrlen)) == -1) {
 		perror("sendto");
 		exit(1);
 	}
