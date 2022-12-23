@@ -7,10 +7,24 @@ int main(void){
 
     unsigned char buf[100];
 
-    if(await_receive(buf) != 0)
+
+    while(1)
     {
-        exit(1);
-    } 
+        if(await_receive(buf) != 0)
+        {
+            exit(1);
+        }
+        
+        printf("\n\n INSIDE DNS.C BUF == %s\n\n",buf);
+
+        
+        if(dns_send(buf, sizeof(buf)) != 0)
+        {
+            exit(1);
+        }
+
+    }
+
 
     // struct Message_Response SGA = {
     //     .header = {
@@ -60,9 +74,7 @@ int main(void){
 
 
 
-    if(dns_send(buf, sizeof(buf)) != 0){
-        exit(1);
-    }
+
 }
 
 

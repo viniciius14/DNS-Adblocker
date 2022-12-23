@@ -58,7 +58,7 @@ int await_receive(unsigned char *buf)
 
 	printf("waiting to recvfrom...\n");
 
-    if ((numbytes = recvfrom(sockfd, &buf, MAXBUFLEN-1 , 0, (struct sockaddr *)&their_addr, &addr_len)) == -1) {
+    if ((numbytes = recvfrom(sockfd, buf, MAXBUFLEN-1 , 0, (struct sockaddr *)&their_addr, &addr_len)) == -1) {
 		perror("recvfrom");
 		exit(1);
 	}
@@ -66,11 +66,12 @@ int await_receive(unsigned char *buf)
 	printf("got packet from %s\n", inet_ntop(their_addr.ss_family, get_in_addr((struct sockaddr *)&their_addr), s, sizeof s));
 	printf("packet is %d bytes long\n", numbytes);
 
-    // printf("packet contents in a hex stream ");
-    // for(int i = 0 ; i != numbytes ; i++){
-    //     printf("%x",buf[i]);
-    // }
-    // printf("\n");
+    printf("packet contents in a hex stream ");
+    for(int i = 0 ; i != numbytes ; i++){
+        printf("%x",buf[i]);
+		if(i % 2 == 0 && i != 0) printf(" ");
+    }
+    printf("\n");
 	return 0;
 }
 
