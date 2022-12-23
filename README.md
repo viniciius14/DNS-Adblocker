@@ -32,3 +32,4 @@
 * [Beej's Demo Server](https://beej.us/guide/bgnet/examples/listener.c)
 * [Beej's Demo Client](https://beej.us/guide/bgnet/examples/talker.c)
 * [DNS RFC](https://www.ietf.org/rfc/rfc1035.txt)
+* [Hosts List](http://someonewhocares.org/hosts/zero/)
