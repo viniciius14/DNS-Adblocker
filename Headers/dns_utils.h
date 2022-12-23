@@ -32,10 +32,10 @@
 //     __uint16_t ARCOUNT;
 // };
 
-struct __attribute__((__packed__)) Header_Flags;
+struct Header_Flags;
 
 
-struct __attribute__((__packed__)) Header
+struct Header
 {
     __uint16_t ID;
     __uint16_t FLAGS;

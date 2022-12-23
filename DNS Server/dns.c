@@ -1,6 +1,14 @@
 #include "../Headers/dns_utils.h"
 
 
+
+
+
+void swap_16_bit(__uint16_t *num)
+{
+    *num = (*num>>8) | (*num<<8);
+}
+
 int main(void){
 
     //struct Message_Query *buf = (struct Message_Query*)malloc(sizeof(struct Message_Query));
@@ -10,10 +18,10 @@ int main(void){
 
     while(1)
     {
-        if((size = await_receive(buf)) == 0)
-        {
-            exit(1);
-        }
+        // if((size = await_receive(buf)) == 0)
+        // {
+        //     exit(1);
+        // }
 
 
         // for(int i = 0 ; i != size ; i++){
@@ -24,13 +32,41 @@ int main(void){
         //now we decode
         //find whats been asked
 
-        
+        unsigned char buf[] = {
+            0x4e, 0x93, 0x01, 0x00, 0x00, 0x01, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x67,
+            0x6f, 0x6f, 0x00, 0x10, 0x67, 0x6c, 0x65,
+            0x03, 0x63, 0x6f, 0x6d, 0x00, 0x00, 0x01, 0x00, 0x01
+        };
 
         struct Header *header = (struct Header*)calloc(1,sizeof(struct Header)); //= (struct Header*)(buf);
         struct Question *question = (struct Question*)calloc(1,sizeof(struct Question)); // = (struct Question*)(buf);
 
 
-        memcpy(header, buf, sizeof(struct Header));
+        int i = 0;
+        memcpy(&(header->ID),      buf + i, 2); i += 2;
+        memcpy(&(header->FLAGS),   buf + i, 2); i += 2;
+        memcpy(&(header->QDCOUNT), buf + i, 2); i += 2;
+        memcpy(&(header->ANCOUNT), buf + i, 2); i += 2;
+        memcpy(&(header->NSCOUNT), buf + i, 2); i += 2;
+        memcpy(&(header->ARCOUNT), buf + i, 2); i += 2;
+
+        swap_16_bit(&(header->ID));
+        swap_16_bit(&(header->FLAGS));
+        swap_16_bit(&(header->QDCOUNT));
+        swap_16_bit(&(header->ANCOUNT));
+        swap_16_bit(&(header->NSCOUNT));
+        swap_16_bit(&(header->ARCOUNT));
+
+
+
+
+
+
+
+
+
+
         memcpy(question, buf + sizeof(struct Header), sizeof(struct Question) ); //sizeof(struct Question) * header->QDCOUNT
 
         struct Header_Flags flags = decode_header_flags(header->FLAGS);
@@ -41,8 +77,8 @@ int main(void){
         // flags = decode_header_flags(header->FLAGS);
 
 
-        printf("Transaction ID: %04X\n", header->ID);
-        printf("Response: %1d\n", flags.QR);
+        printf("Transaction ID: %x\n", header->ID);
+        printf("Response: %d\n", flags.QR);
         printf("Number of questions: %d\n", header->QDCOUNT);
         printf("Number of answers: %d\n", header->ANCOUNT);
 
