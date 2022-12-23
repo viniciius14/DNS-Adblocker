@@ -1,16 +1,17 @@
 #include "../Headers/dns_utils.h"
+#include "../Headers/hosts.h"
 
 int main(void){
 
     //struct Message_Query *buf = (struct Message_Query*)malloc(sizeof(struct Message_Query));
 
-    unsigned char buf[100], *hostname;
+    unsigned char buf[500], *hostname;
     int size = 0, i = 0, y = 0;
 
 
     while(1)
     {
-        // if((size = await_receive(buf)) == 0)
+        // if((size = await_receive(buf,4950)) == 0)
         // {
         //     exit(1);
         // }
@@ -104,29 +105,57 @@ int main(void){
 
 
         //search file for hostname
+        char *host = find_host(hostname);
+
+        if(host){
+            //return IP OF HTTP SERVER
+        }
+        else{
+            //create a reply struct
+            //and then send it
 
 
 
+            // struct Header *r_header = (struct Header *)malloc(sizeof(struct Header));
+            // struct Header_Flags r_flag;
+            
+            // r_header->ID = header->ID;
+
+            // r_flag.QR     = 1;
+            // r_flag.OPCODE = 0;
+            // r_flag.AA     = 0;
+            // r_flag.TC     = 0;
+            // r_flag.RD     = 1;
+            // r_flag.RA     = 0;
+            // r_flag.Z      = 0;
+            // r_flag.RCODE  = 0;
+
+            // r_header->FLAGS = encode_header_flags(r_flag);
+            // r_header->QDCOUNT = 1;
+            // r_header->ANCOUNT = 1; //9?
+
+
+            unsigned char *new_buf;
+            if(dns_send(new_buf, sizeof(new_buf), 53, "8.8.8.8") != 0)
+            {
+                exit(1);
+            }
+            return new_buf;
+
+            //return dns packet response
+        }
        
-
-        //struct Question *question = (struct Question*)(buf);
-
-
-
-        //struct Header *header = malloc(sizeof(struct Header));
         
-        //memcpy(header, buf, sizeof(struct Header));
-
-
-
-
         
-        //create a reply struct
-        //and then send it
+
+
+
+
+
 
 
         break;
-        if(dns_send(buf, sizeof(buf)) != 0)
+        if(dns_send(buf, sizeof(buf), 4950, "::1") != 0)
         {
             exit(1);
         }

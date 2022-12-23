@@ -33,13 +33,6 @@ error:
     return NULL;  
 }
 
-int main(){
-
-    char *a = find_host("www.adverterenzeeland.nl");
-    if(a){
-        printf("found!\n%s\n",a);
-    }
-}
 
 
 
