@@ -26,8 +26,12 @@ int main(void){
 
         
 
-        struct Header *header = (struct Header*)(buf);
+        struct Header *header = (struct Header*)calloc(1,sizeof(struct Header)); //= (struct Header*)(buf);
+        struct Question *question = (struct Question*)calloc(1,sizeof(struct Question)); // = (struct Question*)(buf);
 
+
+        memcpy(header, buf, sizeof(struct Header));
+        memcpy(question, buf + sizeof(struct Header), sizeof(struct Question) ); //sizeof(struct Question) * header->QDCOUNT
 
         struct Header_Flags flags = decode_header_flags(header->FLAGS);
 
@@ -37,13 +41,18 @@ int main(void){
         // flags = decode_header_flags(header->FLAGS);
 
 
-        printf("Transaction ID: %04X\n", ntohs(header->ID));
+        printf("Transaction ID: %04X\n", header->ID);
         printf("Response: %1d\n", flags.QR);
-        printf("Number of questions: %d\n", ntohs(header->QDCOUNT));
-        printf("Number of answers: %d\n", ntohs(header->ANCOUNT));
+        printf("Number of questions: %d\n", header->QDCOUNT);
+        printf("Number of answers: %d\n", header->ANCOUNT);
+
+        char *hostname_resp = NULL;
+
+        //struct Question *question = (struct Question*)(buf);
 
 
-
+        decode_hostname(buf, &hostname_resp);
+        printf("Hostname (response): %s\n", hostname_resp);
 
 
 

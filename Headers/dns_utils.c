@@ -1,7 +1,20 @@
-#include "dns_utils.h"
+#include "../Headers/dns_utils.h"
 
 #define PORT "4950" //change to 53
 #define MAXBUFLEN 100
+
+
+struct __attribute__((__packed__)) Header_Flags
+{
+    uint16_t QR : 1;
+    uint16_t OPCODE : 4;
+    uint16_t AA : 1;
+    uint16_t TC : 1;
+    uint16_t RD : 1;
+    uint16_t RA : 1;
+    uint16_t Z  : 3;
+    uint16_t RCODE  : 4;
+};
 
 
 void *get_in_addr(struct sockaddr *sa)
@@ -113,6 +126,12 @@ int dns_send(unsigned char *buf, size_t size)
 	freeaddrinfo(servinfo);
 
 	printf("sent %d bytes to localhost\n", numbytes);
+	printf("packet: ");
+
+	for(int i = 0 ; i != size ; i++){
+		printf("%x",buf[i]);
+	}
+	printf("\n");
 	close(sockfd);
 	
 	return 0;
@@ -143,14 +162,40 @@ int encode_hostname(char *dest, char *hostname)
 
 int decode_hostname(char *src, char **hostname) 
 {
-    int len = 0;
-    while (src[len] != 0) {
-        if (len > 0) (*hostname)[len-1] = '.';
-        *hostname = realloc(*hostname, src[len]+1);
-        memcpy(*hostname+len, src+len+1, src[len]);
-        len+=src[len]+1;
-    }
-    (*hostname)[len]='\0';
+
+	int len = src[0];
+	int size = 0;
+
+
+
+	
+
+	// for(int i = 1 ; len != 0 ; i++, len--)
+	// {
+	// 	if(len == 0)
+
+	// 	hostname[size] = src[i];
+
+	// 	size++;
+
+	// }
+
+
+
+    // int len = 0;
+    // while (src[len] != 0) {
+
+    //     if (len > 0)
+	// 	{
+	// 		(*hostname)[len-1] = '.';
+	// 	}
+	// 	*hostname = realloc(*hostname, src[len]+1);
+        
+	// 	memcpy(*hostname+len, src+len+1, src[len]);
+        
+	// 	len+=src[len]+1;
+    // }
+    // (*hostname)[len]='\0';
     return len+1;
 }
 
@@ -175,14 +220,14 @@ struct Header_Flags decode_header_flags(__uint16_t value)
 {
     struct Header_Flags flags;
 
-	flags.QR 	 = (value >> 15) &1 ;
-    flags.OPCODE = (value >> 11) &15;
-    flags.AA 	 = (value >> 10) &1 ;
-    flags.TC 	 = (value >> 9 ) &1 ;
-    flags.RD 	 = (value >> 8 ) &1 ;
-    flags.RA 	 = (value >> 7 ) &1 ;
-    flags.Z 	 = (value >> 4 ) &7 ;
-    flags.RCODE  = (value >> 0 ) &15;
+	flags.QR 	  = (value >> 15) &1 ;
+    flags.OPCODE  = (value >> 11) &15;
+    flags.AA 	  = (value >> 10) &1 ;
+    flags.TC 	  = (value >> 9 ) &1 ;
+    flags.RD 	  = (value >> 8 ) &1 ;
+    flags.RA 	  = (value >> 7 ) &1 ;
+    flags.Z 	  = (value >> 4 ) &7 ;
+    flags.RCODE   = (value >> 0 ) &15;
 
 	return flags;
 }
