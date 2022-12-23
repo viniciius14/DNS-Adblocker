@@ -45,14 +45,14 @@ struct Header
     __uint16_t ARCOUNT;
 };
 
-struct __attribute__((__packed__)) Question
+struct Question
 {
     char *QNAME;
     __uint16_t QTYPE;
     __uint16_t QCLASS;
 };
 
-struct __attribute__((__packed__)) Resource
+struct Resource
 {
     char *NAME;
     __uint16_t TYPE;
@@ -62,14 +62,14 @@ struct __attribute__((__packed__)) Resource
     char *RDATA;
 };
 
-struct __attribute__((__packed__)) Message_Query
+struct Message_Query
 {
     struct Header header;
     struct Question question;
     struct Resource additional;
 };
 
-struct __attribute__((__packed__)) Message_Response
+struct Message_Response
 {
     struct Header header;
     struct Question question;
@@ -98,7 +98,7 @@ struct Header_Flags decode_header_flags(__uint16_t value);
 
 
 
-
+void swap_16_bit(__uint16_t *num);
 
 
 

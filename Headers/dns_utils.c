@@ -26,6 +26,11 @@ void *get_in_addr(struct sockaddr *sa)
 	return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
+void swap_16_bit(__uint16_t *num)
+{
+    *num = (*num>>8) | (*num<<8);
+}
+
 int await_receive(unsigned char *buf)
 {
     int sockfd, rv, numbytes;
