@@ -6,7 +6,7 @@
 
 char *find_host(const char *hostname)
 {
-    FILE *fp = fopen("../hosts/hosts.txt","r");
+    FILE *fp = fopen("../Hosts/hosts.txt","r");
     if(!fp) goto error;
 
     fseek(fp, 0, SEEK_END);
@@ -18,7 +18,7 @@ char *find_host(const char *hostname)
         char *ip, *temp_host, *token, delim[] = " \t\n";
 
         if(ftell(fp) == size) break;
-                
+
         fgets(temp, sizeof(temp), fp);
         if(!fgets) goto error;
 
