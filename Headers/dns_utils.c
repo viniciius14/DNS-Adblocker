@@ -199,4 +199,5 @@ struct Header_Flags decode_header_flags(__uint16_t value)
 
 	return flags;
 }
+
 #endif
