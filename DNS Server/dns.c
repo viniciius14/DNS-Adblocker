@@ -3,18 +3,16 @@
 
 int main(void){
 
-    //struct Message_Query *buf = (struct Message_Query*)malloc(sizeof(struct Message_Query));
-
     unsigned char buf[500], *hostname = (char *)malloc(1);
     int size = 0, i = 0, y = 0;
 
 
     while(1)
     {
-        // if((size = await_receive(buf,4950)) == 0)
-        // {
-        //     exit(1);
-        // }
+        if((size = await_receive(buf,4950)) == 0)
+        {
+            exit(1);
+        }
 
 
         // for(int i = 0 ; i != size ; i++){
@@ -25,14 +23,14 @@ int main(void){
         // now we decode
         // find out whats been asked
 
-        unsigned char buf[] = {
-            0x4e, 0x93, 0x01, 0x00, 0x00,
-            0x01, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x06, 0x67, 0x6f,
-            0x6f, 0x67, 0x6c, 0x65, 0x03,
-            0x63, 0x6f, 0x6d, 0x00, 0x00,
-            0x01, 0x00, 0x01
-        };
+        // unsigned char buf[] = {
+        //     0x4e, 0x93, 0x01, 0x00, 0x00,
+        //     0x01, 0x00, 0x00, 0x00, 0x00,
+        //     0x00, 0x00, 0x06, 0x67, 0x6f,
+        //     0x6f, 0x67, 0x6c, 0x65, 0x03,
+        //     0x63, 0x6f, 0x6d, 0x00, 0x00,
+        //     0x01, 0x00, 0x01
+        // };
 
         struct Header *header = (struct Header*)calloc(1,sizeof(struct Header));
         struct Question *quest = (struct Question*)calloc(1,sizeof(struct Question));
@@ -69,7 +67,6 @@ int main(void){
         memcpy(&(quest->QTYPE),   buf + i, 2); i += 2;
         memcpy(&(quest->QCLASS),  buf + i, 2); i += 2;
 
-
         swap_16_bit(&(header->ID));
         swap_16_bit(&(header->FLAGS));
         swap_16_bit(&(header->QDCOUNT));
@@ -80,9 +77,7 @@ int main(void){
         swap_16_bit(&(quest->QTYPE));
         swap_16_bit(&(quest->QCLASS));
 
-
         struct Header_Flags flags = decode_header_flags(header->FLAGS);
-
         
         printf("Transaction ID: %x\n",       header->ID);
 
@@ -105,13 +100,50 @@ int main(void){
 
 
         //search file for hostname
-        char *host = find_host(hostname);
-        
-    
+        char *host = find_host(hostname);    
 
 
         if(host){
             //return IP OF HTTP SERVER
+
+
+            //create a response
+            struct Header r_header;
+            struct Header_Flags r_flag;
+            struct Question r_quest;
+            struct Resource r_answer;
+
+            r_header.ID = header->ID;
+
+            r_flag.QR     = 1;
+            r_flag.OPCODE = 0;
+            r_flag.AA     = 0;
+            r_flag.TC     = 0;
+            r_flag.RD     = 1;
+            r_flag.RA     = 0;
+            r_flag.Z      = 0;
+            r_flag.RCODE  = 0;
+
+            r_header.FLAGS = encode_header_flags(r_flag);
+            r_header.QDCOUNT = 1;
+            r_header.ANCOUNT = 1;
+            r_header.NSCOUNT = 0;
+            r_header.ARCOUNT = 0;
+
+            encode_hostname(r_quest.QNAME, hostname);
+            r_quest.QTYPE  = quest->QTYPE;
+            r_quest.QCLASS = quest->QCLASS;
+
+            encode_hostname(r_answer.NAME, hostname);
+            r_answer.TYPE       = quest->QTYPE;
+            r_answer.CLASS      = quest->QCLASS;
+            r_answer.TTL        = 0;
+            r_answer.RDLENGTH   = 4;  // size in octets of ip
+            r_answer.RDATA      = "127.0.0.1";
+
+
+
+
         }
         else{
             // ask google / await response / send the results to ourselves

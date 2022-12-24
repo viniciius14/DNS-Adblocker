@@ -16,9 +16,6 @@ struct Header_Flags
     uint16_t RCODE  : 4;
 };
 
-
-
-
 void *get_in_addr(struct sockaddr *sa)
 {
 	if (sa->sa_family == AF_INET) {
@@ -146,11 +143,6 @@ int dns_send(unsigned char *buf, size_t size, const int port, const char *addres
 
 int encode_hostname(char *dest, char *hostname) 
 {
-    // www.google.com
-    // 3www
-    // 6google
-    // 3com
-    // 0
     char *token = strtok(hostname, ".");
 
     int len = 0;
@@ -167,7 +159,6 @@ int encode_hostname(char *dest, char *hostname)
     return offset+1;
 }
 
-// flags to uint16_t encoder
 __uint16_t encode_header_flags(struct Header_Flags flags)
 {
     return (__uint16_t) 
@@ -183,7 +174,6 @@ __uint16_t encode_header_flags(struct Header_Flags flags)
 	);
 }
 
-// uint16_t to flags decoder
 struct Header_Flags decode_header_flags(__uint16_t value)
 {
     struct Header_Flags flags;

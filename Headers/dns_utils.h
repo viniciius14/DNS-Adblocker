@@ -43,22 +43,6 @@ struct Resource
     char *RDATA;
 };
 
-struct Message_Query
-{
-    struct Header header;
-    struct Question question;
-    struct Resource additional;
-};
-
-struct Message_Response
-{
-    struct Header header;
-    struct Question question;
-    struct Resource answer;
-    struct Resource additional;
-};
-
-
 
 void *get_in_addr(struct sockaddr *sa);
 void swap_16_bit(__uint16_t *num);
