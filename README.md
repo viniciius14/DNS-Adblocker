@@ -1,4 +1,4 @@
-# DNS Proxy AdBlocker  
+# DNS AdBlocker  
 
 ## Notes  
 
