@@ -28,7 +28,7 @@ int main(void){
     };
 
 
-    if(dns_send(new, sizeof(new), 53, "127.0.0.1") != 0)
+    if(dns_send(new, sizeof(new), "53", "127.0.0.1") != 0)
     {
         exit(1);
     }
@@ -37,7 +37,7 @@ int main(void){
 
 
     unsigned char buffer[100];
-    if(await_receive(buffer, 53) != 0)
+    if(await_receive(buffer, "53") != 0)
     {
         exit(1);
     } 

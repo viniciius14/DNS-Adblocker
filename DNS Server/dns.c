@@ -9,21 +9,21 @@ int main(void){
 
     while(1)
     {
-        // if((size = await_receive(buf, "53")) == 0)
-        // {
-        //     exit(1);
-        // }
+        if((size = await_receive(buf, "53")) == 0)
+        {
+            exit(1);
+        }
         // decode & find out whats been asked
 
         // dns query for google.com
-        unsigned char buf[] = {
-            0x4e, 0x93, 0x01, 0x00, 0x00,
-            0x01, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x06, 0x67, 0x6f,
-            0x6f, 0x67, 0x6c, 0x65, 0x03,
-            0x63, 0x6f, 0x6d, 0x00, 0x00,
-            0x01, 0x00, 0x01
-        };
+        // unsigned char buf[] = {
+        //     0x4e, 0x93, 0x01, 0x00, 0x00,
+        //     0x01, 0x00, 0x00, 0x00, 0x00,
+        //     0x00, 0x00, 0x06, 0x67, 0x6f,
+        //     0x6f, 0x67, 0x6c, 0x65, 0x03,
+        //     0x63, 0x6f, 0x6d, 0x00, 0x00,
+        //     0x01, 0x00, 0x01
+        // };
 
         struct Header *header = (struct Header*)calloc(1,sizeof(struct Header));
         struct Question *quest = (struct Question*)calloc(1,sizeof(struct Question));

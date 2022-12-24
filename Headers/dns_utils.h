@@ -15,6 +15,7 @@
 
 #include "../Headers/dns_utils.c"
 
+struct Header_Flags;
 
 struct Header{
     __uint16_t ID;

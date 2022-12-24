@@ -2,7 +2,7 @@
 #define DNS_UTILS_C
 #include "../Headers/dns_utils.h"
 
-#define MAXBUFLEN 100
+#define MAXBUFLEN 500
 
 struct Header_Flags
 {
@@ -42,9 +42,10 @@ int await_receive(unsigned char *buf, const char *port)
 	socklen_t addr_len;
 
 	memset(&hints, 0, sizeof hints);
-	hints.ai_family = AF_INET6; 
+	hints.ai_family = AF_UNSPEC; 
 	hints.ai_socktype = SOCK_DGRAM;
 	hints.ai_flags = AI_PASSIVE; // use my IP
+	
 
 	if ((rv = getaddrinfo("::1", port, &hints, &servinfo)) != 0) {
 		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
@@ -100,7 +101,7 @@ int dns_send(unsigned char *buf, size_t size, const char *port, const char *addr
 	struct addrinfo hints, *servinfo, *p;
 
 	memset(&hints, 0, sizeof hints);
-	hints.ai_family = AF_INET6;
+	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_DGRAM;
 
 	if ((rv = getaddrinfo(address, port, &hints, &servinfo)) != 0) {
