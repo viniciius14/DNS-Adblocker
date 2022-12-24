@@ -2,7 +2,6 @@
 
 ## Notes  
 
-* The code has to work in the LusiadaLab VM 2.0  
 * Needs to be ran as sudo in order to connect to the reserved ports (53 and 80)
 * Only supports one query and reply at a time
 
