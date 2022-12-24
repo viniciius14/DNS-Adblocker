@@ -106,6 +106,12 @@ int main(void){
 
         //search file for hostname
         char *host = find_host(hostname);
+        
+        
+        /**/
+        break;
+        /**/
+
 
         if(host){
             //return IP OF HTTP SERVER

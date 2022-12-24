@@ -9,10 +9,16 @@ char *find_host(const char *hostname)
     FILE *fp = fopen("../hosts/hosts.txt","r");
     if(!fp) goto error;
 
+    fseek(fp, 0, SEEK_END);
+    int size = ftell(fp);
+    fseek(fp, 0, SEEK_SET); 
+
     while(1){
         char temp[250];
-        char *ip, *temp_host, *token, delim[] = " \t\n";;
-        
+        char *ip, *temp_host, *token, delim[] = " \t\n";
+
+        if(ftell(fp) == size) break;
+                
         fgets(temp, sizeof(temp), fp);
         if(!fgets) goto error;
 
@@ -23,7 +29,7 @@ char *find_host(const char *hostname)
         ptr = strtok(NULL, delim);
         temp_host = ptr;
         
-        if(*temp_host == *hostname){
+        if(!strcmp(temp_host, hostname)){
             return ip;
         }
     }
