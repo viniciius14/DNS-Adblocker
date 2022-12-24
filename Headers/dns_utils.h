@@ -16,8 +16,7 @@
 #include "../Headers/dns_utils.c"
 
 
-struct Header
-{
+struct Header{
     __uint16_t ID;
     __uint16_t FLAGS;
     __uint16_t QDCOUNT;
@@ -26,15 +25,13 @@ struct Header
     __uint16_t ARCOUNT;
 };
 
-struct Question
-{
+struct Question{
     char *QNAME;
     __uint16_t QTYPE;
     __uint16_t QCLASS;
 };
 
-struct Resource
-{
+struct Resource{
     char *NAME;
     __uint16_t TYPE;
     __uint16_t CLASS;
@@ -47,8 +44,8 @@ struct Resource
 void *get_in_addr(struct sockaddr *sa);
 void swap_16_bit(__uint16_t *num);
 
-int await_receive(unsigned char *buf, int port);
-int dns_send(unsigned char *buf, size_t size, const int port, const char *address);
+int await_receive(unsigned char *buf, const char *port);
+int dns_send(unsigned char *buf, size_t size, const char *port, const char *address);
 
 int encode_hostname(char *dest, char *hostname);
 __uint16_t encode_header_flags(struct Header_Flags flags);

@@ -16,6 +16,7 @@ struct Header_Flags
     uint16_t RCODE  : 4;
 };
 
+
 void *get_in_addr(struct sockaddr *sa)
 {
 	if (sa->sa_family == AF_INET) {
@@ -30,7 +31,7 @@ void swap_16_bit(__uint16_t *num)
     *num = (*num>>8) | (*num<<8);
 }
 
-int await_receive(unsigned char *buf, int port)
+int await_receive(unsigned char *buf, const char *port)
 {
     int sockfd, rv, numbytes;
 	char s[INET6_ADDRSTRLEN];    
@@ -45,7 +46,7 @@ int await_receive(unsigned char *buf, int port)
 	hints.ai_socktype = SOCK_DGRAM;
 	hints.ai_flags = AI_PASSIVE; // use my IP
 
-	if ((rv = getaddrinfo("::1", (char*)&port, &hints, &servinfo)) != 0) {
+	if ((rv = getaddrinfo("::1", port, &hints, &servinfo)) != 0) {
 		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
 		return 1;
 	}
@@ -93,7 +94,7 @@ int await_receive(unsigned char *buf, int port)
 	return numbytes;
 }
 
-int dns_send(unsigned char *buf, size_t size, const int port, const char *address)
+int dns_send(unsigned char *buf, size_t size, const char *port, const char *address)
 {
     int sockfd, rv, numbytes;
 	struct addrinfo hints, *servinfo, *p;
@@ -102,7 +103,7 @@ int dns_send(unsigned char *buf, size_t size, const int port, const char *addres
 	hints.ai_family = AF_INET6;
 	hints.ai_socktype = SOCK_DGRAM;
 
-	if ((rv = getaddrinfo(address, (char*)&port, &hints, &servinfo)) != 0) {
+	if ((rv = getaddrinfo(address, port, &hints, &servinfo)) != 0) {
 		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
 		return 1;
 	}
