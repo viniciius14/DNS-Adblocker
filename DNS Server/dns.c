@@ -5,7 +5,7 @@ int main(void){
 
     //struct Message_Query *buf = (struct Message_Query*)malloc(sizeof(struct Message_Query));
 
-    unsigned char buf[500], *hostname;
+    unsigned char buf[500], *hostname = (char *)malloc(1);
     int size = 0, i = 0, y = 0;
 
 
@@ -134,30 +134,16 @@ int main(void){
             // r_header->QDCOUNT = 1;
             // r_header->ANCOUNT = 1; //9?
 
-
-            unsigned char *new_buf;
-            if(dns_send(new_buf, sizeof(new_buf), 53, "8.8.8.8") != 0)
+            // ask google / await its response / send the results to ourselfs
+            if(dns_send(buf, sizeof(buf), 53, "8.8.8.8") == 0)
             {
-                exit(1);
+                int size = 0;
+                unsigned char buf[500] = {0};
+                if((size = await_receive(buf, 53)) != 0){
+                    //send to original adress
+                    dns_send(buf, size, 53, "::1");
+                }
             }
-            return new_buf;
-
-            //return dns packet response
-        }
-       
-        
-        
-
-
-
-
-
-
-
-        break;
-        if(dns_send(buf, sizeof(buf), 4950, "::1") != 0)
-        {
-            exit(1);
         }
 
     }

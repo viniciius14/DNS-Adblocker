@@ -33,17 +33,6 @@
 //     __uint16_t ARCOUNT;
 // };
 
-struct Header_Flags
-{
-    uint16_t QR : 1;
-    uint16_t OPCODE : 4;
-    uint16_t AA : 1;
-    uint16_t TC : 1;
-    uint16_t RD : 1;
-    uint16_t RA : 1;
-    uint16_t Z  : 3;
-    uint16_t RCODE  : 4;
-};
 
 
 struct Header
@@ -94,7 +83,7 @@ void *get_in_addr(struct sockaddr *sa);
 
 int await_receive(unsigned char *buf, int port);
 
-int dns_send(unsigned char *buf, size_t size, int port, const char *address);
+int dns_send(unsigned char *buf, size_t size, const int port, const char *address);
 
 
 int encode_hostname(char *dest, char *hostname);
