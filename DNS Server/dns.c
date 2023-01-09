@@ -38,10 +38,9 @@ int main(void){
 
         //get hostname
         do{
-            if((int)buf[i] >= 58 ){
+            if((int)buf[i] >= 58 ){ // last number ASCII value = 57
                 hostname = realloc(hostname, sizeof(hostname) + 1);
                 hostname[y] = buf[i];
-                y++;
             }
             else{
                 if(y == 0){
@@ -50,9 +49,8 @@ int main(void){
                 }
                 hostname = realloc(hostname, sizeof(hostname) + 1);
                 hostname[y] = '.';
-                y++;
             }
-            
+            y++;
             i++;
         }while(buf[i] !=  0x00);
         i++;
@@ -95,7 +93,6 @@ int main(void){
         // search file for hostname
         char *host = find_host(hostname);
 
-        break;
         if(host){
             // return IP OF HTTP SERVER -- since its in current machine
             // ip == 127.0.0.1
