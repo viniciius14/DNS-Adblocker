@@ -116,7 +116,7 @@ int main(void){
             r_flag.Z      = 0;
             r_flag.RCODE  = 0;
 
-            r_header.FLAGS = encode_header_flags(r_flag);
+            r_header.FLAGS   = encode_header_flags(r_flag);
             r_header.QDCOUNT = 1;
             r_header.ANCOUNT = 1;
             r_header.NSCOUNT = 0;
@@ -139,11 +139,11 @@ int main(void){
                                 sizeof(struct Resource));
 
             int offset = 0;
-            reply = memcpy((reply + offset), &r_header, sizeof(struct Header)); 
+            reply   = memcpy((reply + offset), &r_header, sizeof(struct Header)); 
             offset += sizeof(struct Header);
-            reply = memcpy((reply + offset), &r_quest, sizeof(struct Question));
+            reply   = memcpy((reply + offset), &r_quest, sizeof(struct Question));
             offset += sizeof(struct Question);
-            reply = memcpy((reply + offset), &r_answer, sizeof(struct Resource));
+            reply   = memcpy((reply + offset), &r_answer, sizeof(struct Resource));
 
             if(dns_send(reply, sizeof(reply), "53", "127.0.0.1") != 0)
             {
