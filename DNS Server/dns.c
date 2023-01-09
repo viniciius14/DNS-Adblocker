@@ -93,7 +93,7 @@ int main(void){
 
 
         // search file for hostname
-        char *host = find_host(hostname);    
+        char *host = find_host(hostname);
 
         break;
         if(host){
