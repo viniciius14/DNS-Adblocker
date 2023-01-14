@@ -28,7 +28,7 @@ void *get_in_addr(struct sockaddr *sa)
 
 void swap_16_bit(__uint16_t *num)
 {
-    *num = (*num>>8) | (*num<<8);
+    *num = (*num >> 8) | (*num << 8);
 }
 
 int await_receive(unsigned char *buf, const char *port)
@@ -166,28 +166,28 @@ __uint16_t encode_header_flags(struct Header_Flags flags)
     return (__uint16_t) 
 	(
 		(flags.QR 		<< 15) 	|
-		(flags.OPCODE 	<< 11)	|
+		(flags.OPCODE 		<< 11)	|
 		(flags.AA 		<< 10)	|
 		(flags.TC 		<< 9 ) 	|
 		(flags.RD 		<< 8 ) 	|
 		(flags.RA 		<< 7 ) 	|
 		(flags.Z 		<< 4 ) 	|
-		(flags.RCODE 	<< 0 )
+		(flags.RCODE 		<< 0 )
 	);
 }
 
 struct Header_Flags decode_header_flags(__uint16_t value)
 {
-    struct Header_Flags flags;
+	struct Header_Flags flags;
 
 	flags.QR 	  = (value >> 15) &1 ;
-    flags.OPCODE  = (value >> 11) &15;
-    flags.AA 	  = (value >> 10) &1 ;
-    flags.TC 	  = (value >> 9 ) &1 ;
-    flags.RD 	  = (value >> 8 ) &1 ;
-    flags.RA 	  = (value >> 7 ) &1 ;
-    flags.Z 	  = (value >> 4 ) &7 ;
-    flags.RCODE   = (value >> 0 ) &15;
+	flags.OPCODE  = (value >> 11) &15;
+	flags.AA 	  = (value >> 10) &1 ;
+	flags.TC 	  = (value >> 9 ) &1 ;
+	flags.RD 	  = (value >> 8 ) &1 ;
+	flags.RA 	  = (value >> 7 ) &1 ;
+	flags.Z 	  = (value >> 4 ) &7 ;
+	flags.RCODE   = (value >> 0 ) &15;
 
 	return flags;
 }
